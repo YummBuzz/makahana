@@ -38,7 +38,7 @@ export default function Navbar() {
               <Link to="" className="icon-logo" onClick={() => handleClick("logo")}
                 style={{ color: clickedLink === "logo" ? "" : "blue" }}
                 >
-                Logo
+                Wagini
               </Link>
             </div>
             <div className="links d-lg-flex gap-4">
