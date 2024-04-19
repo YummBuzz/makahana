@@ -8,6 +8,8 @@ import Home from "./components/user/home/Home";
 import About from "./components/user/about/About";
 import Contact from "./components/user/contact/Contact";
 import Error from "./components/user/error/Error";
+import Login from "./components/user/auth/Login";
+import Footer from "./components/user/footer/Footer";
 
 function App() {
   return (
@@ -19,7 +21,9 @@ function App() {
           <Route path="about" element={<About/>}/>
           <Route path="contact" element={<Contact/>}/>
           <Route path="*" element={<Error/>}/>
+          <Route path="login" element={<Login/>}/>
         </Routes>
+        <Footer/>
       </BrowserRouter>
     </>
   );

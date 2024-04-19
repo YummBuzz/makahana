@@ -7,23 +7,23 @@ export default function Error() {
     <>
       <div className="mn-err d-flex justify-content-center align-items-center flex-column">
       <h1>OOPS! Something went wrong.</h1>
-      <p class="zoom-area">
-        <b>ERROR</b> 404 Page{" "}
+      <p className="zoom-area">
+        <b>ERROR</b> 404 Page!{" "}
       </p>
-      <section class="error-container">
-        <span class="four">
-          <span class="screen-reader-text">4</span>
+      <section className="error-container">
+        <span className="four">
+          <span className="screen-reader-text">4</span>
         </span>
-        <span class="zero">
-          <span class="screen-reader-text">0</span>
+        <span className="zero">
+          <span className="screen-reader-text">0</span>
         </span>
-        <span class="four">
-          <span class="screen-reader-text">4</span>
+        <span className="four">
+          <span className="screen-reader-text">4</span>
         </span>
       </section>
-      <div class="link-container">
+      <div className="link-container">
         <Link to=""
-          class="more-link"
+          className="more-link"
         >
           Visit the Home Page
         </Link>
