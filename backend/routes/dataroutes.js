@@ -22,5 +22,8 @@ routes.post('/loginAuthenticate', datacontroller.authenticateLogin);
 // User Profile 
 routes.get('/profile',authenticateToken,  datacontroller.userProfile );
 
+// verify acoount email
+routes.get('/verify/:token',datacontroller.verifyemail);
+
 
 module.exports = routes;

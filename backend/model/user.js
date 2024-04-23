@@ -5,7 +5,11 @@ const userschema = new mongoose.Schema({
     password: String,
     name: String,
     resetToken: String,
-  resetTokenExpiry: Date
+  resetTokenExpiry: Date,
+  isVerified: Boolean,
+  createdAt: { type: Date, default: Date.now }
+
+  
    
     
 });

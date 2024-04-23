@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./Login.css";
 import Button from 'react-bootstrap/Button';
 import axios from 'axios'
@@ -6,8 +6,10 @@ import axios from 'axios'
 
 
 export default function Login() {
-//   const [username, setUsername] = useState(false);
+    const [loggedIn, setLoggedIn] = useState(false);
 const [loading, setLoading] = useState(false);
+const [popup,setPopup]=useState(false);
+const [result,setResult]=useState("")
 
 const [formData, setFormData] = useState({
     username: '',
@@ -25,39 +27,68 @@ const [formData, setFormData] = useState({
   const handleSubmit = async(e) => {
     e.preventDefault();
     e.preventDefault();
-    setLoading(true); // Set loading state to true when the button is clicked
+    setLoading(true); 
+    setPopup(true)
     try {
-      // Simulate an API call with a timeout
-      const response = await axios.post('/api/login', formData);
+      
+      const response = await axios.post('http://localhost:3800/loginAuthenticate', formData);
       console.log(response.data);
-      // Handle form submission using formData
+      localStorage.setItem('token', response.data.token);
+      setLoggedIn(true);
+      setResult(response.data.message)
       console.log('Form submitted with data:', formData);
     } catch (error) {
       console.error('An error occurred:', error);
+      setResult(error.response.data)
+    //   console.log(error.response.data)
     } finally {
       setLoading(false); // Set loading state back to false after API call completes
     }
   };
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    console.log(token)
+    if (token) {
+     axios.get("http://localhost:3800/profile", {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+     
+      .then((response) => {
+       
+        console.log(response.data); 
+        
+        setLoggedIn(true); 
+      })
+        .catch((error) => {
+          if (error.response && error.response.status === 401) {
+            // Token expired, clear it from local storage
+            localStorage.removeItem('token');
+            setLoggedIn(false);
+          } else {
+            console.error(error);
+          }
+        });
+    }
+  });
 
 
   return (
     <>
       <div className="main">
         <div>Login</div>
-        {/* <button onClick={() => setUsername(true)}>Login</button>
-        {username && (
+       
+       {popup && (
           <div className="popup">
             <div className="sub-popup">
-              <p>hello</p>
-              <span>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga
-                pariatur enim modi, unde blanditiis ad similique suscipit ex!
-                Dolorum, sunt?
-              </span>
-              <button onClick={() => setUsername(false)}>Logout</button>
+              <p>{result}</p>
+              <button onClick={() => setPopup(false)}>Logout</button>
+             
+             
             </div>
           </div>
-        )} */}
+        )}
 
 
 
