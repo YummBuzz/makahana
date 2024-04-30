@@ -9,9 +9,9 @@ routes.post('/sendForgetLink', datacontroller.sendForgetPasswordLink)
 
 // routes.post("/verifyUser", datacontroller.verifyUser);
 
-//update new password after verification  
+// reset password with reset password link
 
-// routes.put("/changePassword/:id", datacontroller.changePassword);
+routes.post("/resetPassword", datacontroller.resetforgetpassword);
 
 // create user new account
 routes.post('/createAccount', datacontroller.addNewUser);

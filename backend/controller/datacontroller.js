@@ -146,3 +146,29 @@ module.exports.sendForgetPasswordLink = async (req, res) => {
     console.log(error);
   }
 };
+
+// route for reset passowrd 
+module.exports.resetforgetpassword = async(req,res)=>{
+  const {token,newPassword}=req.body
+
+  try{
+    const user = await stuser.findOne({resetToken:token,resetTokenExpiry:{$gt:Date.now()}})
+    if(!user){
+      res.status(400).send('Invalid or expired token')
+    }
+     // Update user's password and clear token
+     const hashedPassword = await bcrypt.hash(newPassword, 10);
+     user.password = hashedPassword;
+     user.resetToken = undefined;
+     user.resetTokenExpiry = undefined;
+     await user.save();
+ 
+     res.status(200).send('Password reset successfully');
+  }
+  catch (error){
+    console.error(error);
+    res.status(500).send('Internal server error');
+
+  }
+
+}
