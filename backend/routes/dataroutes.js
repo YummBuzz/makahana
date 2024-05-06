@@ -31,5 +31,8 @@ routes.post('/adminlogin',datacontroller.authlogin)
 // admin register
 routes.post('/adminregister',datacontroller.authregister)
 
+// delete register admin
+routes.delete('/deleteadmin',datacontroller.deletesubadmin)
+
 
 module.exports = routes;
