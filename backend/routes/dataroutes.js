@@ -25,5 +25,11 @@ routes.get('/profile',authenticateToken,  datacontroller.userProfile );
 // verify acoount email
 routes.get('/verify/:token',datacontroller.verifyemail);
 
+// admin login 
+routes.post('/adminlogin',datacontroller.authlogin)
+
+// admin register
+routes.post('/adminregister',datacontroller.authregister)
+
 
 module.exports = routes;

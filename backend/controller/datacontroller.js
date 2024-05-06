@@ -3,6 +3,7 @@ const stuser = require("../model/user.js");
 var bcrypt = require("bcrypt");
 const  jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const adminuser = require("../model/adminuser.js");
 
 // nodemailer config
 let transporter = nodemailer.createTransport({
@@ -171,4 +172,94 @@ module.exports.resetforgetpassword = async(req,res)=>{
 
   }
 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// admin auth routes -----!
+
+// admin auth login
+
+
+module.exports.authlogin = async(req,res) => {
+  try{
+    const {username,password}=req.body
+    const admin = await adminuser.findOne({username});
+    if(!admin){
+      res.status(404).send("Admin Not Found!")
+    }
+    const validPassword = await bcrypt.compare(password, user.password);
+    if(!validPassword){
+      res.status(401).send("Invalid Password");
+    }
+    const token = jwt.sign({ adminId: admin._id },  process.env.SECRET_KEY);  
+      
+        res.status(200).json({ token,message:"Successfully Logged In!" });
+
+
+  }
+catch(err){
+  console.log(err)
+}
+
+
+}
+
+// admin auth register
+
+module.exports.authregister = async (req,res)=>{
+  try{
+    const{username,password,accesslevel}=req.body;
+    // console.log(req.body)
+    let user = await adminuser.findOne({ username: username });
+    if (user) {
+      res.status(400).send("Username already exists");
+    } else {
+      // Hash the password
+      const hashedPassword = await bcrypt.hash(password, 10);
+      
+      const newAdmin = new adminuser({ username, password: hashedPassword, accesslevel});
+      // console.log(newAdmin)
+      await newAdmin.save();
+      res.status(200).send("User Registered");
+    
+    }
+
+  }
+  catch(err){
+    console.log(err)
+  }
 }
