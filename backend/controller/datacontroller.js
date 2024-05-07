@@ -185,13 +185,14 @@ module.exports.authlogin = async (req, res) => {
   try {
     const { username, password } = req.body;
     const admin = await adminuser.findOne({ username });
-    if (!admin) {
-      return res.status(404).send("Admin Not Found!");
-    }
+
+    if (!admin)  return res.status(404).send("Admin Not Found!");
+  
     const validPassword = await bcrypt.compare(password, admin.password);
-    if (!validPassword) {
-      return res.status(401).send("Invalid Password");
-    }
+    
+    if (!validPassword)  return res.status(401).send("Invalid Password");
+     
+    
     const token = jwt.sign({ adminId: admin._id }, process.env.SECRET_KEY);
 
     res.status(200).json({ token, message: "Successfully Logged In!", admin });

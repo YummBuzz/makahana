@@ -19,7 +19,8 @@ const Navbar = lazy(()=> import('./components/Navbar/Navbar'));
 
 
 // admin components import
-const Admin = lazy( ()=>import('./components/admin/Admin'))
+const Adminlogin = lazy( ()=>import('./components/admin/Auth/Login'))
+const Admindashboard = lazy( ()=>import('./components/admin/sections/Dashboard'))
 
 function App() {
   const adminPath = window.location.pathname === '/adminpanel';
@@ -50,10 +51,11 @@ function App() {
           <Route path="contact" element={<Contact/>}/>
           <Route path="*" element={<Error/>}/>
           <Route path="login" element={<Login/>}/>
-          <Route path="adminpanel" element={<Admin/>}/>
+          <Route path="adminpanel" element={<Adminlogin/>}/>
+          <Route path="admindashboard/*" element={<Admindashboard/>}/>
           
         </Routes>
-        <Footer/>
+        {/* <Footer/> */}
         </Suspense>
       </BrowserRouter>
     </>
