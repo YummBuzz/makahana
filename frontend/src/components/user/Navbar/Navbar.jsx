@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import "../Navbar/Navbar.css";
+import "./Navbar.css";
 import { FaRegUser } from "react-icons/fa";
 import { FaShoppingBag } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoClose } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
-export default function Navbar() {
+export default function Navbar({data}) {
   const [clickedLink, setClickedLink] = useState();
   const [showIcon, setShowIcon] = useState(false);
   const handleClick = (e) => {
@@ -38,7 +38,7 @@ export default function Navbar() {
               <Link to="" className="icon-logo" onClick={() => handleClick("logo")}
                 style={{ color: clickedLink === "logo" ? "" : "blue" }}
                 >
-                Wagini
+             {data}
               </Link>
             </div>
             <div className="links d-lg-flex gap-4">

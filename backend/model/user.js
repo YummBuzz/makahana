@@ -9,9 +9,6 @@ const userschema = new mongoose.Schema({
   isVerified: Boolean,
   createdAt: { type: Date, default: Date.now }
 
-  
-   
-    
 });
 const stuser = mongoose.model("users", userschema);
 stuser.createIndexes();

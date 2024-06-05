@@ -1,0 +1,20 @@
+.mn-sd{
+    height: 92vh;
+   
+}
+.box{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+}
+.bx-link{
+    text-decoration: none;
+    color: #ffffff66;
+}
+.bx-link:hover{
+
+    color: #ffff;
+}
+
+

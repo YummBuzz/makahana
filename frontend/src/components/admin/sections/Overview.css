@@ -1,0 +1,63 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.4.0/font/bootstrap-icons.min.css");
+@import url(https://unpkg.com/@webpixels/css@1.1.5/dist/index.css);
+
+
+
+.ov-container{
+    color: #fff ;
+    height: 85vh;
+    overflow-y: scroll;
+}
+.db__product {
+	display: flex;
+	justify-content: space-between;
+}
+.db__product-details {
+	width: 33%;
+}
+.db__product-details + .db__product-details {
+	text-align: right;
+	width: 67%;
+}
+.db__product-detail-line {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.db__product-table {
+	border-collapse: collapse;
+	text-align: left;
+	width: 100%;
+}
+.db__product-table th,
+.db__product-table td {
+	padding: 1em 0.5em 1em 0;
+}
+.db__product-table th {
+	font-weight: 400;
+}
+.db__product-table th:nth-child(odd) {
+	width: 30%;
+}
+.db__product-table th:nth-child(even) {
+	width: 20%;
+}
+.db__product-table td {
+	max-width: 1px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.db__product-table th,
+.db__product-table tr:not(:last-child) td {
+	box-shadow: 0 -1px 0 hsla(0,0%,50%,0.3) inset;
+}
+.db__product-table thead,
+.db__product-table td + td {
+	display: none;
+}
+
+.card-footer{
+	border-top: none;
+}
