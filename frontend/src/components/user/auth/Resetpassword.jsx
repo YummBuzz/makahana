@@ -18,7 +18,7 @@ export default function Resetpassword() {
     if (tokenFromUrl) {
       setToken(tokenFromUrl);
     } else {
-        navigate('/forgot-passwordshboard');
+        navigate('/forgot-password');
      // Redirect to forget password page if token is not provided
     }
   }, [location, history]);

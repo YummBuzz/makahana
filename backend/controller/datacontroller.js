@@ -5,10 +5,11 @@ const jwt = require("jsonwebtoken");
 // const crypto = require("crypto");
 const adminuser = require("../model/adminuser.js");
 const stproduct =require('../model/product.js')
-
-const instance = require('../server.js')
+const stmsg =require('../model/message.js')
+const Razorpay = require("razorpay")
+// const instance = require('../server.js')
 const crypto =require('crypto')
-const payment = require('../model/payment.js')
+const payment = require('../model/order.js')
 
 // nodemailer config
 let transporter = nodemailer.createTransport({
@@ -228,9 +229,7 @@ module.exports.activeuser = async (req, res) => {
     const increasePercentage = (increaseCount / totalCount) * 100;
     const decreasePercentage = (decreaseCount / totalCount) * 100;
 
-    // console.log(increaseCount)
-    // console.log(totalCount)
-    // console.log(sameCount)
+    
 
 
     let trend = "";
@@ -475,7 +474,27 @@ module.exports.activity =async(req,res)=>{
 // get all product api 
 module.exports.getproduct = async(req,res)=>{
   try{
-    const products= await stproduct.find();
+    let query = {};
+    if (req.query.brand && req.query.brand !== '') {
+        query = { brand: req.query.brand };
+        console.log(query)
+    }
+
+    // filter parameter for sorting
+
+    let sortOption = { _id: 1 }; // Default sorting by _id
+    if (req.query.sort === 'lowToHigh') {
+        sortOption = { 'prices.price': 1 };
+    } else if (req.query.sort === 'highToLow') {
+        sortOption = { 'prices.price': -1 };
+    } else if (req.query.sort === 'aToZ') {
+        sortOption = { name: 1 };
+    } else if (req.query.sort === 'zToA') {
+        sortOption = { name: -1 };
+    }
+
+    const products = await stproduct.find(query).sort(sortOption);
+
     res.status(200).send(products)
   }
   catch(err){
@@ -483,8 +502,49 @@ module.exports.getproduct = async(req,res)=>{
   }
 }
 
+// product detail get of a specific product
+
+module.exports.productdetail = async(req,res)=>{
+  try{
+    const{id}=req.params
+    const product = await stproduct.findById(id);
+    res.status(200).send(product)
+  }
+  catch(err){
+    console.error(err)
+    res.status(500).json({ message: 'Server Error' });
+
+  }
+}
+
+// get product on size select 
+module.exports.selectSize =async(req,res)=>{
+  try{
+    const { brand, size } = req.params;
+    console.log(req.params)
+      let query = { brand };
+      if (size !== '') {
+          query['prices.size'] = size;
+      }
+      const products = await stproduct.find(query);
+      res.json(products);
+ 
+    
+  }
+  catch(err){
+      console.error(err);
+      res.status(500).json({ message: 'Server Error' });
+  
+  }
+}
+
 
 // Payment module  
+const instance = new Razorpay({
+  key_id: process.env.RAZORPAY_API_KEY,
+  key_secret: process.env.RAZORPAY_API_SECRET,
+});
+
 
 module.exports.createorder=async(req,res)=>{
 
@@ -515,7 +575,7 @@ module.exports.paymentverification=async(req,res)=>{
 const body = razorpay_order_id + "|" + razorpay_payment_id;
 
 const expectedSignature = crypto
-  .createHmac("sha256", process.env.RAZORPAY_APT_SECRET)
+  .createHmac("sha256", process.env.RAZORPAY_API_SECRET)
   .update(body.toString())
   .digest("hex");
 
@@ -532,7 +592,7 @@ if (isAuthentic) {
   });
 
   res.redirect(
-    `http://localhost:5173/paymentsuccess?reference=${razorpay_payment_id}`
+    `${process.env.URL}/paymentsuccess?reference=${razorpay_payment_id}`
   );
 } else {
   res.status(400).json({
@@ -544,6 +604,45 @@ if (isAuthentic) {
   catch(err){
     console.log(err)
 
+  }
+}
+
+
+
+
+
+// user send message via contact form
+
+module.exports.message=async(req,res)=>{
+  try{
+    const{name,email,contact,message}=req.body
+
+    let newMsg = new stmsg({
+     name,contact,email,message
+    });
+    // console.log(newUser)
+    await newMsg.save();
+
+    // Send verification email
+    const mailOptions = {
+      from: process.env.SMTP_MAIL,
+      to: process.env.SMTP_MAIL,
+      subject: "Contact Form",
+      html: `
+    <p><b>Name : </b> ${name} </p>
+     <p><b>Email : </b> ${email}</p>
+    <p><b>Mobile Number : </b> ${contact}</p>
+    <p><b>Message : </b> ${message}</p>
+      `,
+    };
+    await transporter.sendMail(mailOptions);
+    return res
+      .status(200)
+      .send("Message Sent successful. ");
+  }
+  catch(err){
+    console.error(err)
+    res.status(500).json({ message: 'Server Error' });
   }
 }
 

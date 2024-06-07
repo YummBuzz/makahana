@@ -19,12 +19,12 @@ const routes =require('./routes/dataroutes.js')
 app.use('/',routes)
 
 // razorpay instance
-const instance = new Razorpay({
-    key_id: process.env.RAZORPAY_API_KEY,
-    key_secret: process.env.RAZORPAY_APT_SECRET,
-  });
+// const instance = new Razorpay({
+//     key_id: process.env.RAZORPAY_API_KEY,
+//     key_secret: process.env.RAZORPAY_API_SECRET,
+//   });
 
-  module.exports = instance 
+//   module.exports = instance 
 
 
 app.listen(process.env.PORT, ()=>{

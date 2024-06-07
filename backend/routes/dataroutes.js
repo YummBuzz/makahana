@@ -56,6 +56,12 @@ routes.post('/admin/activity',datacontroller.activity)
 
 routes.get('/products',datacontroller.getproduct)
 
+// get product on selct size 
+routes.get('/products/:brand/:size',datacontroller.selectSize)
+
+// get product detail 
+ routes.get('/products/:id',datacontroller.productdetail)
+
 
 // payment routes api
 
@@ -64,6 +70,9 @@ routes.post('/create-order',datacontroller.createorder)
 
 // for payment verification 
 routes.post('/paymentverification',datacontroller.paymentverification)
+
+// message via contact form
+routes.post('/message',datacontroller.message)
 
 
 module.exports = routes;

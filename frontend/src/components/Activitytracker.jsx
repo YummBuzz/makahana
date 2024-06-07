@@ -21,7 +21,7 @@ export default function Activitytracker({userId}) {
 
     updateUserActivity(); // Update activity immediately when component mounts
 
-    intervalRef.current = setInterval(updateUserActivity, 10000); // Update activity every minute
+    intervalRef.current = setInterval(updateUserActivity, 300000); // Update activity every five minute
 
     // Cleanup function
     return () => {

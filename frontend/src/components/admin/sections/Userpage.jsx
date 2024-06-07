@@ -19,9 +19,7 @@ export default function Userpage() {
         console.error(error);
       });
   };
-  const close = () => {
-    alert("hello");
-  };
+  
 
   useEffect(() => {
     axios
