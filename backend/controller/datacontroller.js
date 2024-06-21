@@ -4,12 +4,13 @@ var bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 // const crypto = require("crypto");
 const adminuser = require("../model/adminuser.js");
-const stproduct =require('../model/product.js')
-const stmsg =require('../model/message.js')
-const Razorpay = require("razorpay")
+const stproduct = require("../model/product.js");
+const stmsg = require("../model/message.js");
+const Razorpay = require("razorpay");
 // const instance = require('../server.js')
-const crypto =require('crypto')
-const payment = require('../model/order.js')
+const crypto = require("crypto");
+const payment = require("../model/order.js");
+const order = require("../model/order.js");
 
 // nodemailer config
 let transporter = nodemailer.createTransport({
@@ -111,6 +112,7 @@ module.exports.userProfile = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+  
     res.json(user);
   } catch (error) {
     console.error(error);
@@ -161,20 +163,19 @@ module.exports.sendForgetPasswordLink = async (req, res) => {
 // all users api
 
 module.exports.getallusers = async (req, res) => {
-  const {id} =req.query
- 
+  const { id } = req.query;
+
   try {
     const user = await stuser.find();
     const userCount = await stuser.countDocuments();
 
-   
     // if(req.query){
-     
-      const userDetail =await stuser.findById(id)
-      // res.status(200).send(userDetail);
-     
+
+    const userDetail = await stuser.findById(id);
+    // res.status(200).send(userDetail);
+
     // }
-    res.status(200).json({ user, userCount,userDetail });
+    res.status(200).json({ user, userCount, userDetail });
   } catch (err) {
     console.log(err);
   }
@@ -219,18 +220,13 @@ module.exports.activeuser = async (req, res) => {
     // Compare counts to determine increase or decrease
 
     const increaseCount = currentWeekCount - previousWeekCount;
-   
+
     const decreaseCount = previousWeekCount - currentWeekCount;
     const sameCount = Math.min(currentWeekCount, previousWeekCount);
-
-
 
     const totalCount = currentWeekCount + previousWeekCount;
     const increasePercentage = (increaseCount / totalCount) * 100;
     const decreasePercentage = (decreaseCount / totalCount) * 100;
-
-    
-
 
     let trend = "";
     let count = 0;
@@ -240,61 +236,60 @@ module.exports.activeuser = async (req, res) => {
       trend = "increase";
       count = increaseCount;
       percentage = increasePercentage;
-  } else if (decreaseCount > increaseCount) {
-      trend = "decrease"; 
+    } else if (decreaseCount > increaseCount) {
+      trend = "decrease";
       count = decreaseCount;
       percentage = decreasePercentage;
-  } else {
+    } else {
       trend = "no_change";
-  }
+    }
+
+    // month percentage of users
+
+    monthAgo.setDate(monthAgo.getDate() - 30);
+
+    const currentMonthCount = await stuser.countDocuments({
+      createdAt: { $gte: monthAgo, $lte: currentDate },
+    });
+
+    const previousMonthCount = await stuser.countDocuments({
+      createdAt: {
+        $gte: new Date(monthAgo.getTime() - 30 * 24 * 60 * 60 * 1000),
+        $lt: monthAgo,
+      },
+    });
+
+    const increaseMonthCount = currentMonthCount - previousMonthCount;
+    const decreaseMonthCount = previousMonthCount - currentMonthCount;
+    const sameMonthCount = Math.min(currentMonthCount, previousMonthCount);
+
+    const totalMonthCount = currentMonthCount + previousMonthCount;
+    const increaseMonthPercentage =
+      (increaseMonthCount / totalMonthCount) * 100;
+    const decreaseMonthPercentage =
+      (decreaseMonthCount / totalMonthCount) * 100;
+
+    let monthtrend = "";
+    let monthcount = 0;
+    let monthpercentage = 0;
+
+    if (increaseMonthCount > decreaseMonthCount) {
+      monthtrend = "increase";
+      monthcount = increaseMonthCount;
+      monthpercentage = increaseMonthPercentage;
+    } else if (decreaseMonthCount > increaseMonthCount) {
+      monthtrend = "decrease";
+      monthcount = decreaseMonthCount;
+      monthpercentage = decreaseMonthPercentage;
+    } else {
+      monthtrend = "no_change";
+    }
+
   
-  
 
+    // products count
+    const productscount =await stproduct.countDocuments()
 
-  // month percentage of users
-
-  monthAgo.setDate(monthAgo.getDate() - 30);
-
-const currentMonthCount = await stuser.countDocuments({
-  createdAt: { $gte: monthAgo, $lte: currentDate },
-});
-
-const previousMonthCount = await stuser.countDocuments({
-  createdAt: {
-    $gte: new Date(monthAgo.getTime() - 30 * 24 * 60 * 60 * 1000),
-    $lt: monthAgo,
-  },
-});
-
-const increaseMonthCount = currentMonthCount - previousMonthCount;
-const decreaseMonthCount = previousMonthCount - currentMonthCount;
-const sameMonthCount = Math.min(currentMonthCount, previousMonthCount);
-
-const totalMonthCount = currentMonthCount + previousMonthCount;
-const increaseMonthPercentage = (increaseMonthCount / totalMonthCount) * 100;
-const decreaseMonthPercentage = (decreaseMonthCount / totalMonthCount) * 100;
-
-
-
-let monthtrend = "";
-let monthcount = 0;
-let monthpercentage = 0;
-
-if (increaseMonthCount > decreaseMonthCount) {
-  monthtrend = "increase";
-  monthcount = increaseMonthCount;
-  monthpercentage = increaseMonthPercentage;
-} else if (decreaseMonthCount > increaseMonthCount) {
-  monthtrend = "decrease";
-  monthcount = decreaseMonthCount;
-  monthpercentage = decreaseMonthPercentage;
-} else {
-  monthtrend = "no_change";
-}
-
-// console.log(monthtrend)
-
-   
     const data = {
       usersWeek,
       usersWeekCount,
@@ -303,7 +298,10 @@ if (increaseMonthCount > decreaseMonthCount) {
       trend,
       count,
       percentage,
-      monthpercentage,monthtrend,monthcount
+      monthpercentage,
+      monthtrend,
+      monthcount,
+      productscount
     };
 
     res.json(data);
@@ -315,9 +313,8 @@ if (increaseMonthCount > decreaseMonthCount) {
 // route for reset passowrd
 
 module.exports.resetforgetpassword = async (req, res) => {
-  const  password  = req.body.formData.password;
-  const token =req.body.token
- 
+  const password = req.body.formData.password;
+  const token = req.body.token;
 
   try {
     const user = await stuser.findOne({
@@ -326,7 +323,7 @@ module.exports.resetforgetpassword = async (req, res) => {
     });
     if (!user) {
       res.status(400).send("Invalid or expired token");
-      return
+      return;
     }
 
     // Update user's password and clear token
@@ -345,9 +342,6 @@ module.exports.resetforgetpassword = async (req, res) => {
 };
 
 // admin auth routes -----!
-
-
-
 
 // admin auth login
 
@@ -429,8 +423,8 @@ module.exports.deletesubadmin = async (req, res) => {
     if (admin.accesslevel == "Main-Admin") {
       return res.status(403).send("Main admin cannot be deleted");
     }
-      await adminuser.findByIdAndDelete(id);
-   
+    await adminuser.findByIdAndDelete(id);
+
     res.status(200).send("Deleted Sucessfully");
   } catch (err) {
     console.log(err);
@@ -448,177 +442,219 @@ module.exports.admindata = async (req, res) => {
   }
 };
 
-
 // admin last login api
-module.exports.activity =async(req,res)=>{
-  const {userId} =req.body
-  try{
-    const user = await adminuser.findOne({username:userId});
-    if(user){
+module.exports.activity = async (req, res) => {
+  const { userId } = req.body;
+  try {
+    const user = await adminuser.findOne({ username: userId });
+    if (user) {
       user.loginTime = Date.now();
       await user.save();
-      return res.status(200).json({ message: 'User activity updated successfully' });
+      return res
+        .status(200)
+        .json({ message: "User activity updated successfully" });
     }
-    return res.status(404).json({ message: 'User not found' });
-
-
-
+    return res.status(404).json({ message: "User not found" });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Internal server error" });
   }
-  catch(err){
-    console.log(err)
-    return res.status(500).json({ message: 'Internal server error' });
+};
 
-  }
-}
+// get all product api
+module.exports.getproduct = async (req, res) => {
+ 
+  try {
+    const { page = 1, pageSize = 6, brand, minPrice, maxPrice, sort } = req.query;
 
-// get all product api 
-module.exports.getproduct = async(req,res)=>{
-  try{
+    // Query parameters
     let query = {};
-    if (req.query.brand && req.query.brand !== '') {
-        query = { brand: req.query.brand };
-        console.log(query)
-    }
 
-    // filter parameter for sorting
+   
+    let sortOption = {};
 
-    let sortOption = { _id: 1 }; // Default sorting by _id
-    if (req.query.sort === 'lowToHigh') {
-        sortOption = { 'prices.price': 1 };
-    } else if (req.query.sort === 'highToLow') {
-        sortOption = { 'prices.price': -1 };
-    } else if (req.query.sort === 'aToZ') {
-        sortOption = { name: 1 };
-    } else if (req.query.sort === 'zToA') {
-        sortOption = { name: -1 };
-    }
-
-    const products = await stproduct.find(query).sort(sortOption);
-
-    res.status(200).send(products)
-  }
-  catch(err){
-    console.log(err)
-  }
+if (sort === 'lowToHigh') {
+  sortOption.price = 1; // Ascending sort by price
+} else if (sort === 'highToLow') {
+  sortOption.price = -1; // Descending sort by price
+} else if (sort === 'aToZ') {
+  sortOption.name = 1; // Ascending sort by name
+} else if (sort === 'zToA') {
+  sortOption.name = -1; // Descending sort by name
+} else {
+  sortOption._id = 1; // Default sorting by _id (or any other default)
 }
+
+    // Pagination
+    const skip = (parseInt(page) - 1) * parseInt(pageSize);
+    const totalCount = await stproduct.countDocuments(query);
+    const totalPages = Math.ceil(totalCount / parseInt(pageSize));
+
+    const products = await stproduct.find(query)
+      .sort(sortOption)
+      .skip(skip)
+      .limit(parseInt(pageSize));
+
+    res.status(200).json({ products, currentPage: parseInt(page), totalPages, totalCount });
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+// random product fetch
+
+module.exports.getrandomlyproducts = async (req, res) => {
+  const randomProducts = await stproduct.aggregate([{ $sample: { size: 8 } }]);
+  res.json(randomProducts);
+};
 
 // product detail get of a specific product
 
-module.exports.productdetail = async(req,res)=>{
-  try{
-    const{id}=req.params
+module.exports.productdetail = async (req, res) => {
+  try {
+    const { id } = req.params;
     const product = await stproduct.findById(id);
-    res.status(200).send(product)
+    res.status(200).send(product);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
   }
-  catch(err){
-    console.error(err)
-    res.status(500).json({ message: 'Server Error' });
+};
 
-  }
-}
 
-// get product on size select 
-module.exports.selectSize =async(req,res)=>{
+// products fetch for backend
+
+module.exports.productData =async(req,res)=>{
   try{
-    const { brand, size } = req.params;
-    console.log(req.params)
-      let query = { brand };
-      if (size !== '') {
-          query['prices.size'] = size;
-      }
-      const products = await stproduct.find(query);
-      res.json(products);
- 
-    
-  }
-  catch(err){
-      console.error(err);
-      res.status(500).json({ message: 'Server Error' });
-  
+    const products = await stproduct.find();
+    const productcount =await stproduct.countDocuments()
+    res.status(200).json({products,productcount})
+
+  }catch(err){
+console.log(err)
   }
 }
 
-
-// Payment module  
+// Payment module
 const instance = new Razorpay({
   key_id: process.env.RAZORPAY_API_KEY,
   key_secret: process.env.RAZORPAY_API_SECRET,
 });
 
-
-module.exports.createorder=async(req,res)=>{
-
-  try{
+module.exports.createorder = async (req, res) => {
+  try {
+    // console.log(req.body)
     const options = {
-      amount: Number(req.body.amount * 100),
+      amount: Number(req.body.cartTotalAmount * 100),
       currency: "INR",
     };
     const order = await instance.orders.create(options);
-  
+    // console.log(order)
+
     res.status(200).json({
       success: true,
       order,
+      key: process.env.RAZORPAY_API_KEY,
     });
-
-
+  } catch (err) {
+    console.log(err);
   }
-  catch(err){
-    console.log(err)
-  }
-}
+};
 
-module.exports.paymentverification=async(req,res)=>{
-  try{
+module.exports.paymentverification = async (req, res) => {
+  // console.log(req.body)
+  try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
-  req.body;
+      req.body.body;
+    const cartdata = req.body.cartdata;
+    const cartTotalAmount = req.body.cartTotalAmount;
+    const cartTotalQuantity = req.body.cartTotalQuantity;
+    const {
+      email,
+      firstname,
+      lastname,
+      address,
+      apartment,
+      country,
+      city,
+      state,
+      pincode,
+      phone,
+    } = req.body.formData;
 
-const body = razorpay_order_id + "|" + razorpay_payment_id;
+    const body = razorpay_order_id + "|" + razorpay_payment_id;
 
-const expectedSignature = crypto
-  .createHmac("sha256", process.env.RAZORPAY_API_SECRET)
-  .update(body.toString())
-  .digest("hex");
+    const expectedSignature = crypto
+      .createHmac("sha256", process.env.RAZORPAY_API_SECRET)
+      .update(body.toString())
+      .digest("hex");
 
-const isAuthentic = expectedSignature === razorpay_signature;
+    const isAuthentic = expectedSignature === razorpay_signature;
 
-if (isAuthentic) {
-  // Database comes here
+    if (isAuthentic) {
+      // Database comes here
 
-  await payment.create({
-    razorpay_order_id,
-    razorpay_payment_id,
-    razorpay_signature,
-    
-  });
+      await order.create({
+        razorpay_order_id,
+        razorpay_payment_id,
+        razorpay_signature,
+        cartdata,
+        cartTotalAmount,
+        cartTotalQuantity,
+        email,
+      firstname,
+      lastname,
+      address,
+      apartment,
+      country,
+      city,
+      state,
+      pincode,
+      phone,
+      });
+      const mailOptions = {
+        from: process.env.SMTP_MAIL,
+        to: email,
+        subject: "Order Placed",
+        html: `
+      <p><b>Name : </b> ${firstname} {lastname} </p>
+       <p><b>Email : </b> ${email}</p>
+      <p><b>Mobile Number : </b> ${phone}</p>
+      
+        `,
+      };
+      await transporter.sendMail(mailOptions);
 
-  res.redirect(
-    `${process.env.URL}/paymentsuccess?reference=${razorpay_payment_id}`
-  );
-} else {
-  res.status(400).json({
-    success: false,
-  });
-}
+      res.json({
+        msg: "success",
+        orderId: razorpay_order_id,
+        paymentId: razorpay_payment_id,
+      });
 
+     
+    } else {
+      res.status(400).json({
+        success: false,
+      });
+    }
+  } catch (err) {
+    console.log(err);
   }
-  catch(err){
-    console.log(err)
-
-  }
-}
-
-
+};
 
 
 
 // user send message via contact form
 
-module.exports.message=async(req,res)=>{
-  try{
-    const{name,email,contact,message}=req.body
+module.exports.message = async (req, res) => {
+  try {
+    const { name, email, contact, message } = req.body;
 
     let newMsg = new stmsg({
-     name,contact,email,message
+      name,
+      contact,
+      email,
+      message,
     });
     // console.log(newUser)
     await newMsg.save();
@@ -636,20 +672,101 @@ module.exports.message=async(req,res)=>{
       `,
     };
     await transporter.sendMail(mailOptions);
-    return res
-      .status(200)
-      .send("Message Sent successful. ");
+    return res.status(200).send("Message Sent successful. ");
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+// to get all the message
+
+module.exports.getmsg = async (req, res) => {
+  try {
+    const products = await stmsg.find();
+    return res.status(200).send(products);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+
+
+// order sections .........
+
+
+
+module.exports.userOrders =async (req,res)=>{
+  try{
+    const{username}=req.body
+    const products = await order.findOne({userdetail:username})
+    console.log(products)
+
   }
   catch(err){
-    console.error(err)
-    res.status(500).json({ message: 'Server Error' });
+    console.log(err)
+
   }
 }
 
 
+// to calculate amount of orders
 
+module.exports.orderData =async(req,res)=>{
+  try{
+    const orders = await order.find();
+    
+  const totalMoney = orders.reduce(
+    (acc, order) => acc + order.cartTotalAmount,
+    0
+  );
+  res.json({ totalMoney,orders });
 
+  }catch(err){
+    console.log(err)
+  }
+}
 
+// fetch acc to date orders
+module.exports.packedorders=async(req,res)=>{
+  try {
+    const orders = await order.find({ packed: true }).sort({ createdAt: 'desc' });
+    res.json(orders);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+  
+}
+module.exports.unpackedorders=async(req,res)=>{
+  try {
+    const orders = await order.find({ packed: false }).sort({ createdAt: 'desc' });
+    res.json(orders);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+  
+}
+
+// order status 
+module.exports.orderstatus =async(req,res)=>{
+
+  try {
+    const { id } = req.params;
+    const orders = await order.findById(id);
+
+    if (!orders) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    orders.packed = true;
+    await orders.save();
+
+    res.status(200).json({ message: 'Packed status updated successfully', orders });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
 
 
 

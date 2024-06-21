@@ -10,6 +10,7 @@ import Userpage from "./Userpage";
 import Access from "./Access";
 import Adminlist from "./Adminlist";
 import Producadd from "./Producadd";
+import Message from './Message';
 
 export default function Dashboard() {
   
@@ -31,6 +32,7 @@ export default function Dashboard() {
               <Route path="/accesspannel" element={<Access/>}/>
               <Route path="/adminlist" element={<Adminlist/>}/>
               <Route path="/addproduct" element={<Producadd/>}/>
+              <Route path="/message" element={<Message/>}/>
             </Routes>
           </div>
         </div>

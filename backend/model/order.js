@@ -11,8 +11,8 @@ const orderschema = new mongoose.Schema({
   state: String,
   pincode: String,
   phone: Number,
-  totalitems: String,
-  totalitemsamount: String,
+  cartTotalQuantity: Number,
+  cartTotalAmount: Number,
   userdetail: String,
   cartdata: Array,
   razorpay_order_id: {
@@ -27,6 +27,8 @@ const orderschema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  createdAt: { type: Date, default: Date.now },
+  packed: { type: Boolean, default: false }
 });
 
 const order = mongoose.model("orders", orderschema);

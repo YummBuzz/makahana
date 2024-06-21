@@ -9,6 +9,7 @@ import { FaUser } from "react-icons/fa";
 import { SiOpenaccess } from "react-icons/si";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
+import { MdMessage } from "react-icons/md";
 
 export default function Adminsidebar() {
   const [clickedLink, setClickedLink] = useState();
@@ -112,6 +113,17 @@ export default function Adminsidebar() {
             style={{ color: clickedLink === "Access" ? "#fff" : "" }}
           >
             Access
+          </Link>
+        </div>
+        <div className="box">
+          <MdMessage style={{ fontSize: "18px" }} />
+          <Link
+            to="/admindashboard/message"
+            className="bx-link"
+            onClick={() => handleClick("Message")}
+            style={{ color: clickedLink === "Message" ? "#fff" : "" }}
+          >
+            Message
           </Link>
         </div>
       </div>

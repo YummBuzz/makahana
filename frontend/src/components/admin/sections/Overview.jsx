@@ -17,6 +17,8 @@ export default function Overview() {
   const [percentage, setPercentage] = useState("");
   const [monthtrend, setMonthtrend] = useState("");
   const [monthpercentage, setMonthpercentage] = useState("");
+  const [totalProducts, setTotalProducts] = useState("");
+  const [totalAmount, setTotalAmount] = useState("");
   const [selectedButton, setSelectedButton] = useState("week");
   useEffect(() => {
     axios
@@ -30,6 +32,8 @@ export default function Overview() {
         setPercentage(response.data.percentage);
         setMonthpercentage(response.data.monthpercentage);
         setMonthtrend(response.data.monthtrend)
+        setTotalProducts(response.data.productscount)
+
         console.log(response.data);
       })
       .catch((error) => {
@@ -39,6 +43,16 @@ export default function Overview() {
       .get(`${import.meta.env.VITE_APP_API_URL}/alluser`)
       .then((response) => {
         setTotalUser(response.data.userCount);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    axios
+      .get(`${import.meta.env.VITE_APP_API_URL}/orderdata`)
+      .then((response) => {
+        const amount = (response.data.totalMoney / 1000).toFixed(2)
+        setTotalAmount(amount);
+        
       })
       .catch((error) => {
         console.error(error);
@@ -58,7 +72,7 @@ export default function Overview() {
                     <span className="h6 font-semibold text-muted text-sm d-block mb-2">
                       All Products
                     </span>
-                    <span className="h3 font-bold mb-0">0</span>
+                    <span className="h3 font-bold mb-0">{totalProducts}</span>
                   </div>
                   <div className="col-auto">
                     <div className="icon icon-shape bg-tertiary text-white text-lg rounded-circle">
@@ -80,7 +94,7 @@ export default function Overview() {
                 </div>
                 <div className="mt-2 mb-0 text-sm">
                   <span className="badge badge-pill bg-soft-success text-success me-2">
-                    <i className="bi bi-arrow-up me-1"></i>13%
+                    <i className="bi bi-arrow-up me-1"></i>0%
                   </span>
                   <span className="text-nowrap text-xs text-muted">
                     Since last month
@@ -180,7 +194,7 @@ export default function Overview() {
                     <span className="h6 font-semibold text-muted text-sm d-block mb-2">
                       Total Revenue
                     </span>
-                    <span className="h3 font-bold mb-0">95</span>
+                    <span className="h3 font-bold mb-0">{totalAmount} k</span>
                   </div>
                   <div className="col-auto">
                     <div className="icon icon-shape bg-warning text-white text-lg rounded-circle">
@@ -369,7 +383,7 @@ export default function Overview() {
                       </tr>
                     </thead>
                     <tbody>
-                      {selectedButton === "week"
+                      {/* {selectedButton === "week"
                         ? usersWeek.map((data) => (
                             <tr key={data._id}>
                               <td className="text-center text-muted">
@@ -413,7 +427,7 @@ export default function Overview() {
 
                               <td className="text-center">{data.phone}</td>
                             </tr>
-                          ))}
+                          ))} */}
                     </tbody>
                   </table>
                 </div>
@@ -485,7 +499,7 @@ export default function Overview() {
                       </tr>
                     </thead>
                     <tbody>
-                      {selectedButton === "week"
+                      {/* {selectedButton === "week"
                         ? usersWeek.map((data) => (
                             <tr key={data._id}>
                               <td className="text-center text-muted">
@@ -529,7 +543,7 @@ export default function Overview() {
 
                               <td className="text-center">{data.phone}</td>
                             </tr>
-                          ))}
+                          ))} */}
                     </tbody>
                   </table>
                 </div>

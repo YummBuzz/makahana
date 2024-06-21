@@ -3,16 +3,12 @@ const mongoose = require('mongoose')
 
 const productschema = new mongoose.Schema({
     title:String,
-    prices: [{
-        size: {
-            type: String,
-            
-        },
         price: {
             type: Number,
             
-        }
-    }],
+        },
+        size:String,
+
     description:String,
     type:String,
     brand:String,

@@ -5,6 +5,8 @@
     /* width: 100vw; */
     /* margin: 30px auto; */
     color: #fff;
+    overflow: scroll;
+    height: 85vh;
 }
 
 h1 {
@@ -63,6 +65,7 @@ table tr:nth-child(odd) td {
     background-color: #efeeee;
     color:#000
 }
+
 
 .modalsec{
     width: 100%;

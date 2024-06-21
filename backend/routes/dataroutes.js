@@ -56,11 +56,17 @@ routes.post('/admin/activity',datacontroller.activity)
 
 routes.get('/products',datacontroller.getproduct)
 
-// get product on selct size 
-routes.get('/products/:brand/:size',datacontroller.selectSize)
+// get product random 
+
+routes.get('/randomproducts',datacontroller.getrandomlyproducts)
+
+// product for backend
+
+routes.get('/dataproducts',datacontroller.productData)
 
 // get product detail 
  routes.get('/products/:id',datacontroller.productdetail)
+
 
 
 // payment routes api
@@ -71,8 +77,26 @@ routes.post('/create-order',datacontroller.createorder)
 // for payment verification 
 routes.post('/paymentverification',datacontroller.paymentverification)
 
+// get orders data
+routes.get('/orderdata',datacontroller.orderData)
+
 // message via contact form
 routes.post('/message',datacontroller.message)
+
+// to get all msg
+
+routes.get('/allmessage',datacontroller.getmsg)
+
+// to get user order
+routes.get('/userorders', datacontroller.userOrders)
+
+// acc to date fetch order
+routes.get('/packedorder',datacontroller.packedorders)
+routes.get('/unpackedorder',datacontroller.unpackedorders)
+
+// order status
+
+routes.put('/statusorder/:id',datacontroller.orderstatus)
 
 
 module.exports = routes;

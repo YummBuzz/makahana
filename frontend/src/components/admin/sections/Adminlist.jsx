@@ -14,7 +14,7 @@ export default function Adminlist() {
     // console.log(import.meta.env.VITE_APP_API_URL)
     axios
       .get(`${import.meta.env.VITE_APP_API_URL}/getalladmin`)
-    //   .get("http://localhost:3800/getalladmin")
+   
 
       .then((response) => {
         setData(response.data);
