@@ -11,6 +11,9 @@ import ScrolltoTop from "./components/ScrolltoTop";
 
 import { Provider } from "react-redux";
 import { store } from "./Store/store";
+import Loading from "./components/Loading";
+import Privacy from "./components/user/pages/Privacy";
+import Terms from "./components/user/pages/Terms";
 
 
 // components imports
@@ -63,7 +66,7 @@ function App() {
     <>
      <Provider store={store}>
       <BrowserRouter>
-        <Suspense fallback={<div>Loading</div>}>
+        <Suspense fallback={<Loading/>}>
           {/* {adminPath || isAdminLoggedIn ? null : <Navbar />} */}
     <ScrolltoTop/>
 
@@ -82,6 +85,8 @@ function App() {
             <Route path="/productdetail/:id" element={<Productdetail/>}/>
             <Route path='/checkout' element={<Checkout/>}/>
             <Route path="/paymentsuccess" element={<Success/>}/>
+            <Route path="/privacy-policy" element={<Privacy/>}/>
+            <Route path="/terms&conditions" element={<Terms/>}/>
             </Routes>
           {/* <Footer/> */}
           <Activitytracker userId={userId} />

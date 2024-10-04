@@ -288,7 +288,7 @@ export default function Navbar({ logo, brand, pdScroll }) {
 
           <div className="cart-btn">
             <Link to='/checkout'> Check Out</Link>
-            <Link to='/products/all'> Continue Shopping </Link>
+            <Link to='/products/all' onClick={() => setIsCart(false)}> Continue Shopping </Link>
           </div>
         </div>
       </div>

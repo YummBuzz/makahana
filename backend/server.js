@@ -8,7 +8,13 @@ dotenv.config();
 
 var app=express()
 app.use(express.json());
-app.use(cors()) 
+app.use(cors(
+    {
+        origin: ["https://makhana-delta.vercel.app"],
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        credentials: true
+    }
+)) 
 // database import 
 
 const database =require('./config/database.js')

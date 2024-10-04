@@ -11,6 +11,7 @@ const Razorpay = require("razorpay");
 const crypto = require("crypto");
 const payment = require("../model/order.js");
 const order = require("../model/order.js");
+const ObjectId = require('mongoose').Types.ObjectId;
 
 // nodemailer config
 let transporter = nodemailer.createTransport({
@@ -47,7 +48,7 @@ module.exports.addNewUser = async (req, res) => {
         from: process.env.SMTP_MAIL,
         to: username,
         subject: "Email Verification",
-        html: `<p>Click <a href="http://localhost:3800/verify/${token}">here</a> to verify your email</p>`,
+        html: `<p>Click <a href="${process.env.HOST_URL}/verify/${token}">here</a> to verify your email</p>`,
       };
       await transporter.sendMail(mailOptions);
       return res
@@ -469,6 +470,10 @@ module.exports.getproduct = async (req, res) => {
 
     // Query parameters
     let query = {};
+    if (req.query.brand && req.query.brand !== 'all') {
+      query = { brand: req.query.brand };
+      // console.log(query)
+  }
 
    
     let sortOption = {};
@@ -518,6 +523,36 @@ module.exports.productdetail = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server Error" });
+  }
+};
+// product fetch by size
+
+module.exports.sizeProduct = async (req, res) => {
+ 
+    const { productId, size } = req.body;
+    // console.log(req.body)
+
+  try {
+    const product = await stproduct.findById(productId);
+    // console.log(product)
+    if (!product || !product.type) {
+      throw new Error("productId or productId.type is undefined or null");
+    }
+   
+    const query = {
+      type: product.type, // Match products with the same type as productId
+      size: size,           // Match products with the specified size
+      _id: { $ne: new ObjectId(productId) } // Exclude the current productId
+    };
+
+    
+    // Performing the query using mongoose
+    const products = await stproduct.find(query);
+    res.json(products);
+    return products;
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
 };
 
@@ -612,15 +647,54 @@ module.exports.paymentverification = async (req, res) => {
       pincode,
       phone,
       });
+
+      // cartdata
+
+      const orderData = () => {
+        var data = "";
+    
+        for (let i = 0; i < cartdata.length; i++) {
+          data += "<b>"+"Name:" + cartdata[i].title + "<br>";
+         
+          data += "<b>"+"Size : " + cartdata[i].size + "<br>";
+          data += "<b>"+"Type : " + cartdata[i].type + "<br>";
+          data += "<b>"+ "Price:" + cartdata[i].price + "<br>";
+         
+          data += "<b>"+"Quantity:" + cartdata[i].quantity + "<br>";
+         
+          // data += "Price : " + cartdata[i].mrp + "<br>";
+         
+          // console.log(i);
+        }
+        return data;
+      };
+
+
+
+
+
       const mailOptions = {
         from: process.env.SMTP_MAIL,
         to: email,
         subject: "Order Placed",
         html: `
-      <p><b>Name : </b> ${firstname} {lastname} </p>
-       <p><b>Email : </b> ${email}</p>
-      <p><b>Mobile Number : </b> ${phone}</p>
-      
+
+        <p>Dear  ${firstname},</p>
+    <p>We are pleased to inform you that your order has been successfully placed.</p>
+    <p><strong>Order Details:</strong></p>
+    <ul>
+      <li><strong>Order ID:</strong> ${razorpay_order_id}</li>
+      <li><strong>Mobile Number:</strong> ${phone} </li>
+      <li><strong>Order:</strong> <br> ${orderData()} </li>
+      <li><strong>Order Date:</strong>  ${new Date().toLocaleDateString()}</li>
+      <li><strong>Total Items :</strong>  ${cartTotalQuantity}</li>
+      <li><strong>Order Total:</strong>  ${cartTotalAmount}</li>
+      <li><strong>Txn ID:</strong>   ${razorpay_payment_id}</li>
+    </ul>
+   
+    <p>Thank you for shopping with us!</p>
+    <p><a href="${process.env.URL}" class="button">Visit Our Website</a></p>
+
         `,
       };
       await transporter.sendMail(mailOptions);
@@ -715,13 +789,35 @@ module.exports.userOrders =async (req,res)=>{
 
 module.exports.orderData =async(req,res)=>{
   try{
-    const orders = await order.find();
-    
-  const totalMoney = orders.reduce(
-    (acc, order) => acc + order.cartTotalAmount,
-    0
-  );
-  res.json({ totalMoney,orders });
+  
+  const today = new Date();
+const firstDayOfCurrentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+const lastDayOfPreviousMonth = new Date(firstDayOfCurrentMonth);
+lastDayOfPreviousMonth.setDate(firstDayOfCurrentMonth.getDate() - 1);
+const firstDayOfPreviousMonth = new Date(lastDayOfPreviousMonth.getFullYear(), lastDayOfPreviousMonth.getMonth(), 1);
+
+const orders = await order.find();
+const totalMoney = orders.reduce((acc, order) => acc + order.cartTotalAmount, 0);
+
+const previousMonthOrders = await order.find({
+  createdAt: {
+    $gte: firstDayOfPreviousMonth,
+    $lt: firstDayOfCurrentMonth
+  }
+});
+
+const previousMonthTotalMoney = previousMonthOrders.reduce((acc, order) => acc + order.cartTotalAmount, 0);
+let percentageGrowth = 0;
+if (previousMonthTotalMoney !== 0) {
+  percentageGrowth = ((totalMoney - previousMonthTotalMoney) / previousMonthTotalMoney) * 100;
+}
+
+res.json({
+  totalMoney,
+  percentageGrowth,
+  orders
+});
+
 
   }catch(err){
     console.log(err)
@@ -765,6 +861,65 @@ module.exports.orderstatus =async(req,res)=>{
     res.status(200).json({ message: 'Packed status updated successfully', orders });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+}
+
+// latest orders of a day
+
+module.exports.latestorder =async(req,res)=>{
+  try{
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set to midnight
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1); // Set to next day
+    
+    const orders = await order.find({
+      orderDate: { $gte: today, $lt: tomorrow }
+    });
+
+    res.json(orders);
+  }
+  catch (err){
+    res.status(500).json({ message: error.message });
+
+  }
+}
+
+
+
+// top selling products
+
+module.exports.topproducts =async(req,res)=>{
+  try{
+    const topProducts = await order.aggregate([
+      { $unwind: '$cartdata' }, // Split orders into individual cart items
+      { $group: {
+          _id: '$cartdata._id', // Group by product ID
+          totalQuantity: { $sum: '$cartdata.quantity' }, // Sum the quantities
+          totalAmount: { $sum: '$cartdata.price' } // Sum the total prices
+      }},
+      { $sort: { totalQuantity: -1 } }, // Sort by total quantity in descending order
+      { $limit: 10 } // Limit to top 10 products (adjust as needed)
+    ]);
+    // console.log(topProducts)
+
+    // Extract product IDs from aggregation result
+    const productIds = topProducts.map(product => product._id);
+
+    // Fetch product details from Product model
+    const products = await stproduct.find({ _id: { $in: productIds } });
+
+    // Combine product details with topProducts
+    const topPurchasedProducts = topProducts.map(product => ({
+      ...product,
+      details: products.find(p => p._id.equals(product._id)) // Assuming _id is ObjectId
+    }));
+
+    res.json(topPurchasedProducts);
+
+  }
+  catch (err){
+
   }
 }
 

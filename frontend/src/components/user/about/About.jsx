@@ -6,7 +6,7 @@ export default function About() {
   return (
    <>
    <Navbar pdScroll={0}/>
-   <div className="about-page-section1 margin-div">
+   <div className="about-page-section1 margin-div mt-5">
       <div className="container">
         <div className="row about-page-content">
           <div className="col-12 about-page-head">

@@ -102,8 +102,8 @@ export default function Userpage() {
                 <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
               </svg>
             </div>
-            <div className="modalsec2 d-flex justify-content-evenly align-items-center ">
-              <div className="ms-1 d-flex flex-column justify-content-between  flex-wrap gap-4">
+            <div className="modalsec2 d-flex ">
+              <div className="ms-1 d-flex flex-column ">
                 <div className="ms-bx" style={{ width: "100%" }}>
                   <p className=" d-flex gap-2 align-items-center  ">
                     <svg
@@ -149,7 +149,7 @@ export default function Userpage() {
                   </div>
                 </div>
 
-                <div className="ms-bx" style={{ width: "100%" }}>
+                {/* <div className="ms-bx" style={{ width: "100%" }}>
                   <p
                     className=" d-flex gap-2 align-items-center"
                     style={{ fontSize: "20px" }}
@@ -212,10 +212,10 @@ export default function Userpage() {
                       </p>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
               {/* Address */}
-              <div className="ms-1 ">
+              {/* <div className="ms-1 ">
                 <div
                   className="ms-bx d-flex flex-column gap-5"
                   style={{ width: "100%", height: "60vh", overflow: "scroll" }}
@@ -268,7 +268,7 @@ export default function Userpage() {
                     </p>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             {/* recent orders */}

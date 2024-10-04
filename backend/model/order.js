@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const orderschema = new mongoose.Schema({
+  // productId: { type: mongoose.Schema.Types.ObjectId, ref: 'product' },
   email: String,
   firstname: String,
   lastname: String,
@@ -15,6 +16,11 @@ const orderschema = new mongoose.Schema({
   cartTotalAmount: Number,
   userdetail: String,
   cartdata: Array,
+  // cartdata: [{
+  //   productId: { type: mongoose.Schema.Types.ObjectId, ref: 'product' }, // Assuming productId is ObjectId
+  //   quantity: Number,
+  //   // price: Number // Adjust as per your schema
+  // }],
   razorpay_order_id: {
     type: String,
     required: true,

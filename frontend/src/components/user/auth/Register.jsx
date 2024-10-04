@@ -5,8 +5,12 @@ import axios from "axios";
 import Alert from "react-bootstrap/Alert";
 import { Link } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
+import {  useLocation, useNavigate } from 'react-router-dom';
+
 
 export default function Register() {
+  const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
   const [isChecked, setIsChecked] = useState(false);
@@ -43,6 +47,17 @@ export default function Register() {
       .then((result) => { 
        
         toast.success(result.data)
+       
+        if(result.status === 200)
+        {
+          setTimeout(() => {
+            navigate('/login');
+          }, 2000);
+          
+         
+
+        }
+       
       
      
       })
@@ -69,7 +84,7 @@ export default function Register() {
         <div className="mb-3">
             <label for="exampleInputEmail1" className="form-label">Name</label>
             <input
-              type="email"
+              type="text"
               className="form-control"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"

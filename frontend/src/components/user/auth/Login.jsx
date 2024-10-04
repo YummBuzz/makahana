@@ -75,8 +75,8 @@ export default function Login() {
       }
     } catch (error) {
       console.error("An error occurred:", error);
-      // setResult(error.response.data);
-      // setStatus(error.response.status);
+      setResult(error.response.data);
+      setStatus(error.response.status);
     } finally {
       setLoading(false); // Set loading state back to false after API call completes
     }

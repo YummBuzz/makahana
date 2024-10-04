@@ -59,5 +59,6 @@
 }
 
 .card-footer{
-	border-top: none;
+	border-top: none !important;
+	width: 200px;
 }

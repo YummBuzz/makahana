@@ -42,7 +42,7 @@ export default function Orders() {
   return (
     <>
       <div className="user-container">
-        <h1>All Message</h1>
+        <h1>All Orders</h1>
 
         <div className="active-user my-5">
           <div className="row">

@@ -20,6 +20,9 @@ export default function Overview() {
   const [totalProducts, setTotalProducts] = useState("");
   const [totalAmount, setTotalAmount] = useState("");
   const [selectedButton, setSelectedButton] = useState("week");
+  const [latestOrder, setLatestOrder] = useState("");
+  const [incomePercentage, setIncomePercentage] = useState("");
+  const [topProducts, setTopProducts] = useState("");
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_APP_API_URL}/activeuser`)
@@ -31,8 +34,8 @@ export default function Overview() {
         setTrend(response.data.trend);
         setPercentage(response.data.percentage);
         setMonthpercentage(response.data.monthpercentage);
-        setMonthtrend(response.data.monthtrend)
-        setTotalProducts(response.data.productscount)
+        setMonthtrend(response.data.monthtrend);
+        setTotalProducts(response.data.productscount);
 
         console.log(response.data);
       })
@@ -50,9 +53,29 @@ export default function Overview() {
     axios
       .get(`${import.meta.env.VITE_APP_API_URL}/orderdata`)
       .then((response) => {
-        const amount = (response.data.totalMoney / 1000).toFixed(2)
+        const amount = (response.data.totalMoney / 1000).toFixed(2);
         setTotalAmount(amount);
-        
+        setIncomePercentage(response.data.percentageGrowth);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    axios
+      .get(`${import.meta.env.VITE_APP_API_URL}/getorder`)
+      .then((response) => {
+        const orders = response.data;
+        setLatestOrder(orders);
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    axios
+      .get(`${import.meta.env.VITE_APP_API_URL}/topselling`)
+      .then((response) => {
+        const topproducts = response.data;
+        setTopProducts(topproducts);
+        console.log(response);
       })
       .catch((error) => {
         console.error(error);
@@ -61,8 +84,6 @@ export default function Overview() {
   return (
     <>
       <div className="ov-container">
-        
-
         <div className="row g-6 mb-6">
           <div className="col-xl-3 col-sm-6 col-12">
             <div className="card shadow border-0">
@@ -213,7 +234,8 @@ export default function Overview() {
                 </div>
                 <div className="mt-2 mb-0 text-sm">
                   <span className="badge badge-pill bg-soft-success text-success me-2">
-                    <i className="bi bi-arrow-up me-1"></i>10%
+                    <i className="bi bi-arrow-up me-1"></i>
+                    {incomePercentage}%
                   </span>
                   <span className="text-nowrap text-xs text-muted">
                     Since last month
@@ -345,7 +367,7 @@ export default function Overview() {
                     Top Selling Products
                   </strong>
                   <div className="btn-actions-pane-right">
-                    <div role="group" className="btn-group-sm btn-group">
+                    {/* <div role="group" className="btn-group-sm btn-group">
                       <button
                         // onClick={() => setSelectedButton("week")}
                         // className={
@@ -368,26 +390,36 @@ export default function Overview() {
                       >
                         15 Days
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div className="table-responsive">
                   <table className="align-middle mb-0 table table-borderless table-striped table-hover">
                     <thead>
                       <tr>
+                      <th>#Product Id</th>
                         <th>Product</th>
-                        <th>#Product Id</th>
-                        <th>Orders </th>
-                        <th>Stock </th>
-                        <th>Price</th>
+                        <th>Size</th>
+                        <th>Total Quantity </th>
+                        <th>Total Amount  </th>
                       </tr>
                     </thead>
                     <tbody>
-                      {/* {selectedButton === "week"
-                        ? usersWeek.map((data) => (
-                            <tr key={data._id}>
+                      {topProducts.length == 0 ? <span
+                          className="d-flex justify-content-center align-items-center "
+                          style={{
+                            fontSize: "20px",
+                            color: "#000",
+                            borderBottom: "none",
+                            marginTop: "10px",
+                            width: "100%",
+                          }}
+                        >
+                          No Top Products Yet
+                        </span>  : topProducts.map((data,index) => (
+                            <tr key={index}>
                               <td className="text-center text-muted">
-                                {data._id}
+                                {data.details._id}
                               </td>
                               <td>
                                 <div className="widget-content p-0">
@@ -395,39 +427,19 @@ export default function Overview() {
                                     <div className="widget-content-left mr-3"></div>
                                     <div className="widget-content-left flex2">
                                       <div className="widget-heading">
-                                        {data.username}
+                                        {data.details.title}
                                       </div>
                                     </div>
                                   </div>
                                 </div>
                               </td>
-                              <td className="text-center">{data.name}</td>
+                              <td className="text-center">{data.details.size}</td>
 
-                              <td className="text-center">{data.phone}</td>
+                              <td className="text-center">{data.totalQuantity}</td>
+                              <td className="text-center">{data.totalAmount}</td>
                             </tr>
                           ))
-                        : usersMonth.map((data) => (
-                            <tr key={data._id}>
-                              <td className="text-center text-muted">
-                                {data._id}
-                              </td>
-                              <td>
-                                <div className="widget-content p-0">
-                                  <div className="widget-content-wrapper">
-                                    <div className="widget-content-left mr-3"></div>
-                                    <div className="widget-content-left flex2">
-                                      <div className="widget-heading">
-                                        {data.username}
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </td>
-                              <td className="text-center">{data.name}</td>
-
-                              <td className="text-center">{data.phone}</td>
-                            </tr>
-                          ))} */}
+                        }
                     </tbody>
                   </table>
                 </div>
@@ -451,104 +463,73 @@ export default function Overview() {
 
         {/* recent orders  */}
 
-
         <div className="active-user my-5">
           <div className="row">
             <div className="col-md-12">
               <div className="main-card mb-3 card">
                 <div className="card-header d-flex justify-content-between">
-                  <strong style={{ fontSize: "20px" }}>
-                Recent Orders
-                  </strong>
-                  {/* <div className="btn-actions-pane-right">
-                    <div role="group" className="btn-group-sm btn-group">
-                      <button
-                        // onClick={() => setSelectedButton("week")}
-                        // className={
-                        //   selectedButton === "week"
-                        //     ? "active btn btn-focus"
-                        //     : "btn btn-focus"
-                        // }
-                        className={"active btn btn-focus"}
-                      >
-                        7 Days
-                      </button>
-                      <button
-                        // onClick={() => setSelectedButton("month")}
-                        className={
-                          "active btn btn-focus"
-                          // selectedButton === "month"
-                          //   ? "active btn btn-focus"
-                          //   : "btn btn-focus"
-                        }
-                      >
-                        15 Days
-                      </button>
-                    </div>
-                  </div> */}
+                  <strong style={{ fontSize: "20px" }}>Recent Orders (per Day)</strong>
                 </div>
                 <div className="table-responsive">
                   <table className="align-middle mb-0 table table-borderless table-striped table-hover">
                     <thead>
                       <tr>
-                      <th>Customer </th>
+                        <th>Order Id </th>
                         <th>Product</th>
-                        <th>#Product Id</th>
-                        <th>Price</th>
+
                         <th>Quantity</th>
+                        <th>Total Amount</th>
+                        <th>Txn Id</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {/* {selectedButton === "week"
-                        ? usersWeek.map((data) => (
-                            <tr key={data._id}>
-                              <td className="text-center text-muted">
-                                {data._id}
-                              </td>
-                              <td>
-                                <div className="widget-content p-0">
-                                  <div className="widget-content-wrapper">
-                                    <div className="widget-content-left mr-3"></div>
-                                    <div className="widget-content-left flex2">
-                                      <div className="widget-heading">
-                                        {data.username}
-                                      </div>
+                      {latestOrder.length == 0 ? (
+                        <span
+                          className="d-flex justify-content-center align-items-center "
+                          style={{
+                            fontSize: "20px",
+                            color: "#000",
+                            borderBottom: "none",
+                            marginTop: "10px",
+                            width: "100%",
+                          }}
+                        >
+                          No Latest Order Yet
+                        </span>
+                      ) : (
+                        latestOrder.map((data) => (
+                          <tr key={data._id}>
+                            <td className="text-center text-muted">
+                              {data.razorpay_order_id}
+                            </td>
+                            <td>
+                              <div className="widget-content p-0">
+                                <div className="widget-content-wrapper">
+                                  <div className="widget-content-left mr-3"></div>
+                                  <div className="widget-content-left flex2">
+                                    <div className="widget-heading">
+                                      {data.firstname}
+                                      {data.lastname}
                                     </div>
                                   </div>
                                 </div>
-                              </td>
-                              <td className="text-center">{data.name}</td>
+                              </div>
+                            </td>
 
-                              <td className="text-center">{data.phone}</td>
-                            </tr>
-                          ))
-                        : usersMonth.map((data) => (
-                            <tr key={data._id}>
-                              <td className="text-center text-muted">
-                                {data._id}
-                              </td>
-                              <td>
-                                <div className="widget-content p-0">
-                                  <div className="widget-content-wrapper">
-                                    <div className="widget-content-left mr-3"></div>
-                                    <div className="widget-content-left flex2">
-                                      <div className="widget-heading">
-                                        {data.username}
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </td>
-                              <td className="text-center">{data.name}</td>
-
-                              <td className="text-center">{data.phone}</td>
-                            </tr>
-                          ))} */}
+                            <td className="text-center">
+                              {data.cartTotalAmount}
+                            </td>
+                            <td className="text-center">
+                              {data.razorpay_payment_id}
+                            </td>
+                          </tr>
+                        ))
+                      )}
                     </tbody>
                   </table>
                 </div>
 
-                <div className="d-block text-center card-footer">
+                {/* <div className="d-block text-center card-footer">
                   {selectedButton === "week" && usersWeek.length >= 7 ? (
                     <button className="btn-wide btn btn-success">
                       View All
@@ -559,36 +540,11 @@ export default function Overview() {
                       View All
                     </button>
                   ) : null}
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
         </div>
-
-
-        
-
-
-        {/* <div className="App">
-          <h1>Recent Orders</h1>
-          <ul>
-                    {orders.map((order) => (
-                      <li key={order._id}></li>
-                    ))}
-                  </ul>
-                  <div>
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                      (page) => (
-                        <button
-                          key={page}
-                          onClick={() => handlePagination(page)}
-                        >
-                          {page}
-                        </button>
-                      )
-                    )}
-                  </div>
-        </div> */}
       </div>
     </>
   );

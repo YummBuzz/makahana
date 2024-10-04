@@ -60,10 +60,10 @@ export default function Adminlist() {
       <div className="ad-container">
         <div className="hd-content d-flex justify-content-between">
           <h1>All Admin</h1>
-          <div className="d-block text-center card-footer">
-            <Link to="/admindashboard/accesspannel">
+          <div className="d-block text-center card-footer" style={{width:"280px"}}>
+            <Link to="/admindashboard/accesspannel" >
               {" "}
-              <button className="btn-wide btn btn-success">
+              <button className="btn-wide btn btn-success" style={{width:"100%"}}>
                 {" "}
                 + Add New Admin
               </button>

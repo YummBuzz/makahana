@@ -8,6 +8,8 @@ import cartSlice, { addToCart } from "../../../Store/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
+
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -25,9 +27,9 @@ import Scrollbutton from "../scrollToTop/Scrollbutton";
 
 export default function Productdetail() {
   const { id } = useParams();
-//   const [selectedSize, setSelectedSize] = useState("");
+  const [selectedSize, setSelectedSize] = useState("");
 //   const [selectedPrice, setSelectedPrice] = useState(null);
-
+const navigate = useNavigate();
   const fetchdata = async () => {
     const response = await axios.get(
       `${import.meta.env.VITE_APP_API_URL}/randomproducts`
@@ -51,17 +53,37 @@ export default function Productdetail() {
       const response = await axios.get(
         `${import.meta.env.VITE_APP_API_URL}/products/${id}`
       );
+      // console.log(response.data)
       return response.data;
     },
     {
       enabled: !!id, // Ensures query is enabled only when id is truthy
     }
   );
+  
 
   // size selecting
-  const handleSizeChange = (size) => {
+  const handleSizeSelect = async(size) => {
+    console.log(size)
+
     setSelectedSize(size);
-    // console.log(size);
+    if (size && id) {
+     
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_APP_API_URL}/productbysize`,
+          { size, productId: id } // Send the current product ID and selected size
+        );
+        
+   
+        const pid =response.data[0]._id
+        navigate(`/productdetail/${pid}`);
+      } catch (error) {
+        console.error("Error fetching product details by size:", error);
+      }
+    }
+
+  
   };
 
 //   //   get price for size selector
@@ -143,7 +165,7 @@ export default function Productdetail() {
         <>
 
           {" "}
-          <div className="product-detail-section1 margin-div">
+          <div className="product-detail-section1 margin-div " key={productsData._id}>
             <div className="container">
               <div className="row g-4">
                 <div className="col-12 col-lg-6 product-detail-slider">
@@ -222,22 +244,23 @@ export default function Productdetail() {
                   <div className="product-size-quantity-btn">
                     <div className="product-size">
                       <p>
-                        Size:<span> {productsData.size}</span>
+                        Size:<span> {
+                          selectedSize == "" ? <>{productsData.size}</> :<>{selectedSize}</>
+                          }</span>
                       </p>
                       <div className="product-size-inputs">
-                        {/* {productsData.prices.map((price) => ( */}
-                          <div className="size-input">
+                        {productsData.sizes.map((size) => (
+                          <div className="size-input" key={size._id}>
                             <input
                               type="radio"
                               name="size"
-                            
-                              id="27g"
-                              checked
-                            
+                              id={size}
+                              // checked
+                              onClick={() => handleSizeSelect(size)}
                             />
-                            <label htmlFor="27g"> {productsData.size}</label>
+                            <label htmlFor="27g"> {size}</label>
                           </div>
-                        {/* ))} */}
+                  ))} 
                    
                       </div>
                     </div>

@@ -16,25 +16,24 @@ export default function Footer() {
             </div>
             <div className="footer-links ">
               <p>
-                <a href="#!" className="contact-link">
+                <a href="" className="contact-link">
                   <i className="ph-fill ph-navigation-arrow"></i>
                   <span>
-                    Rishab Global industries Pvt Ltd.,New
-                    Delhi – 110005</span
+                  1202, 12th floor, Barkhamba road, Connaught Place, Delhi-110001</span
                   >
                 </a>
               </p>
 
               <p>
-                <a href="#!" className="contact-link">
+                <a href="tel:8986927873" className="contact-link">
                   <i className="ph-bold ph-phone"></i>
-                  <span> 011+95829266</span>
+                  <span> +91 8986927873</span>
                 </a>
               </p>
               <p>
-                <a href="#!" className="contact-link">
+                <a href="mailto:sales@wagini.com" className="contact-link">
                   <i className="ph-bold ph-envelope-simple"></i>
-                  <span> waginimakhana@gmail.com</span>
+                  <span> sales@wagini.com</span>
                 </a>
               </p>
             </div>
@@ -56,9 +55,9 @@ export default function Footer() {
               <h4>  Terms & Conditions</h4>
             </div>
             <div className="footer-links">
-              <p><Link to="/"> Privacy Policy </Link></p>
+              <p><Link to="/privacy-policy"> Privacy Policy </Link></p>
               <p><Link to="/"> Return Policy</Link></p>
-              <p><Link to="/"> Terms & Conditions </Link></p>
+              <p><Link to="/terms&conditions"> Terms & Conditions </Link></p>
             </div>
           </div>
           <div className="col-12 col-lg-3">
@@ -77,7 +76,7 @@ export default function Footer() {
             <a href="#!"> <i className="ph-bold ph-facebook-logo"></i> </a>
             <a href="#!"> <i className="ph-bold ph-instagram-logo"></i></a>
             <a href="#!"> <i className="ph-bold ph-twitter-logo"></i></a>
-            <a href="#!"><i className="ph-bold ph-envelope-simple"></i></a>
+            <a href="mailto:sales@wagini.com"><i className="ph-bold ph-envelope-simple"></i></a>
           </div>
         </div>
         <div className="row mt-3">

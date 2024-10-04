@@ -60,6 +60,11 @@ routes.get('/products',datacontroller.getproduct)
 
 routes.get('/randomproducts',datacontroller.getrandomlyproducts)
 
+// get product by size
+
+routes.post('/productbysize',datacontroller.sizeProduct);
+
+
 // product for backend
 
 routes.get('/dataproducts',datacontroller.productData)
@@ -97,6 +102,12 @@ routes.get('/unpackedorder',datacontroller.unpackedorders)
 // order status
 
 routes.put('/statusorder/:id',datacontroller.orderstatus)
+
+// latest order
+routes.get('/getorder',datacontroller.latestorder)
+
+// top selling products 
+routes.get('/topselling',datacontroller.topproducts)
 
 
 module.exports = routes;

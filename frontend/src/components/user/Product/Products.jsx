@@ -21,22 +21,24 @@ export default function Products() {
   const [pageSize] = useState(6); // Number of items per page
 
   const fetchdata = async (brand) => {
-   
-    const response = await axios.get(`${import.meta.env.VITE_APP_API_URL}/products`, {
-      params: {
-        brand: selectedBrand,
-        sort: sort,
-        page: currentPage, // Include current page in params
-        pageSize: pageSize // Include page size in params
-      },
-    });
-   
+    const response = await axios.get(
+      `${import.meta.env.VITE_APP_API_URL}/products`,
+      {
+        params: {
+          brand: selectedBrand,
+          sort: sort,
+          page: currentPage, // Include current page in params
+          pageSize: pageSize, // Include page size in params
+        },
+      }
+    );
+
     return response.data;
   };
 
   const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ["products", selectedBrand, sort,currentPage],
-    queryFn: () => fetchdata(selectedBrand, sort,currentPage),
+    queryKey: ["products", selectedBrand, sort, currentPage],
+    queryFn: () => fetchdata(selectedBrand, sort, currentPage),
   });
 
   useEffect(() => {
@@ -73,23 +75,16 @@ export default function Products() {
     setSelectedBrand(e);
   };
 
-
   // cart
 
-  
   const dispatch = useDispatch();
 
   const handleAddToCart = (product) => {
-    
-      const productAdd = {
-        ...product,
-       
-       
-      };
+    const productAdd = {
+      ...product,
+    };
 
-      dispatch(addToCart(productAdd));
-
-   
+    dispatch(addToCart(productAdd));
   };
 
   const handlePageChange = (pageNumber) => {
@@ -107,7 +102,7 @@ export default function Products() {
         data-bs-ride="carousel false"
       >
         <div className="carousel-inner w-100 h-100 ">
-          {banner1Img ? (
+          {banner1Img && (
             <>
               <div className="carousel-item active">
                 <img
@@ -130,9 +125,7 @@ export default function Products() {
                 />
               </div>
             </>
-          ) : (
-            <>loading</>
-          )}
+          ) }
           {banner2Img && (
             <div className={`${classTag} carousel-item `}>
               <img
@@ -232,23 +225,23 @@ export default function Products() {
                     </li>
                     <li>
                       <a className="dropdown-item" href="#">
-                      Alphabetically A to Z
+                        Alphabetically A to Z
                       </a>
                     </li>
                     <li>
                       <a className="dropdown-item" href="#">
-                      Alphabetically Z to A
+                        Alphabetically Z to A
                       </a>
                     </li>
                     <li>
                       <a className="dropdown-item" href="#">
-                    Low to High{" "}
+                        Low to High{" "}
                       </a>
                     </li>
 
                     <li>
                       <a className="dropdown-item" href="#">
-                      High to Low{" "}
+                        High to Low{" "}
                       </a>
                     </li>
                   </ul>
@@ -408,91 +401,127 @@ export default function Products() {
             {/* <!--products-shop-container--> */}
             <div className="col-12 col-xl-9 product-shop-container">
               <div className="row g-5">
-                
-                {isLoading ? (
-                  <h1>Loading...</h1>
-                ) : isError ? (
+                { isError ? (
                   <h1>Error fetching data.</h1>
                 ) : (
                   <>
-                    {data && data.products.map((product) => (
-                      <div className="col-12 col-md-6 col-xl-4" key={product._id}>
-                        <div className="product-card">
-                          <div className="product-main-img-container">
-                            <div className="product-img-container">
-                              <Link to={`/productdetail/${product._id}`}>
-                                <img src={product.imgFront} alt={product.title} />
-                                <img src={product.imgBack} alt={product.title} />
-                              </Link>
-                            </div>
-                          </div>
-                          <div className="product-card-detail">
-                            <div style={{ width: "100%" }}>
-                              <span className="product-brand" style={{ textTransform: "capitalize" }}>
-                                {product.brand}
-                              </span>
-                              <h5 style={{ minHeight: "60px" }}>
-                                <Link to={`/productdetail/${product._id}`}>{product.title}</Link>
-                              </h5>
-                            </div>
-                            <div className="price-cart d-flex flex-column gap-2 justify-content-start gap-3">
-                              <div className="d-flex justify-content-between">
-                                <p>
-                                  <span>Size: </span> {product.size}
-                                </p>
-                                <p>
-                                  <span>Price: Rs </span> {product.price}
-                                </p>
+                    {data &&
+                      data.products.map((product) => (
+                        <div
+                          className="col-12 col-md-6 col-xl-4"
+                          key={product._id}
+                        >
+                          <div className="product-card">
+                            <div className="product-main-img-container">
+                              <div className="product-img-container">
+                                <Link to={`/productdetail/${product._id}`}>
+                                  <img
+                                    src={product.imgFront}
+                                    alt={product.title}
+                                  />
+                                  <img
+                                    src={product.imgBack}
+                                    alt={product.title}
+                                  />
+                                </Link>
                               </div>
-                              <button type="button" onClick={() => handleAddToCart(product)}>
-                                Add To Cart
-                              </button>
+                            </div>
+                            <div className="product-card-detail">
+                              <div style={{ width: "100%" }}>
+                                <span
+                                  className="product-brand"
+                                  style={{ textTransform: "capitalize" }}
+                                >
+                                  {product.brand}
+                                </span>
+                                <h5 style={{ minHeight: "60px" }}>
+                                  <Link to={`/productdetail/${product._id}`}>
+                                    {product.title}
+                                  </Link>
+                                </h5>
+                              </div>
+                              <div className="price-cart d-flex flex-column gap-2 justify-content-start gap-3">
+                                <div className="d-flex justify-content-between">
+                                  <p>
+                                    <span>Size: </span> {product.size}
+                                  </p>
+                                  <p>
+                                    <span>Price: Rs </span> {product.price}
+                                  </p>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => handleAddToCart(product)}
+                                >
+                                  Add To Cart
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
                   </>
                 )}
-
-
               </div>
             </div>
 
-
             {/* Pagination */}
-            <div style={{marginTop:"20px"}}>
-            {isLoading ? (
-                  <h1>Loading...</h1>
-                ) : isError ? (
-                  <h1>Error fetching data.</h1>
-                ) : (
-                  <>
-            {data && data.totalPages > 1 && (
-                <nav className="pagination-container" >
-                  <ul className="pagination justify-content-center " >
-                    <li className={`page-item ${currentPage === 1 && "disabled"}`}>
-                      <button className="page-link"  onClick={() => handlePageChange(currentPage - 1)} aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                      </button>
-                    </li>
-                    {[...Array(data.totalPages)].map((_, index) => (
-                      <li key={index} className={`page-item ${currentPage === index + 1 && "active"}`}  >
-                        <button className="page-link" onClick={() => handlePageChange(index + 1)} >
-                          {index + 1}
-                        </button>
-                      </li>
-                    ))}
-                    <li className={`page-item ${currentPage === data.totalPages && "disabled"}`}>
-                      <button className="page-link"  onClick={() => handlePageChange(currentPage + 1)} aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                      </button>
-                    </li>
-                  </ul>
-                </nav>
+            <div style={{ marginTop: "20px" }}>
+              {isLoading ? (
+                <h1>Loading...</h1>
+              ) : isError ? (
+                <h1>Error fetching data.</h1>
+              ) : (
+                <>
+                  {data && data.totalPages > 1 && (
+                    <nav className="pagination-container">
+                      <ul className="pagination justify-content-center ">
+                        <li
+                          className={`page-item ${
+                            currentPage === 1 && "disabled"
+                          }`}
+                        >
+                          <button
+                            className="page-link"
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            aria-label="Previous"
+                          >
+                            <span aria-hidden="true">&laquo;</span>
+                          </button>
+                        </li>
+                        {[...Array(data.totalPages)].map((_, index) => (
+                          <li
+                            key={index}
+                            className={`page-item ${
+                              currentPage === index + 1 && "active"
+                            }`}
+                          >
+                            <button
+                              className="page-link"
+                              onClick={() => handlePageChange(index + 1)}
+                            >
+                              {index + 1}
+                            </button>
+                          </li>
+                        ))}
+                        <li
+                          className={`page-item ${
+                            currentPage === data.totalPages && "disabled"
+                          }`}
+                        >
+                          <button
+                            className="page-link"
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            aria-label="Next"
+                          >
+                            <span aria-hidden="true">&raquo;</span>
+                          </button>
+                        </li>
+                      </ul>
+                    </nav>
+                  )}
+                </>
               )}
-               </>
-                )}
             </div>
           </div>
         </div>
@@ -503,22 +532,25 @@ export default function Products() {
         <div className="container">
           <div className="row about-product">
             <div className="col-12 col-lg-9">
-              <h4>What is Lorem Ipsum?</h4>
+              <h4>Enjoy the Healthy Crunch of Nutritious Makhana?</h4>
               <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Error,
-                fugiat! Saepe fugit soluta nisi quaerat sunt sint, neque
-                mollitia dolor repellat voluptatibus reiciendis ab, ad sed
-                exercitationem voluptates aliquam possimus? Lorem ipsum dolor
-                sit amet, consectetur adipisicing elit. Nam tempora nulla
-                nostrum quia, explicabo provident culpa ad exercitationem
-                laboriosam sequi a iusto quaerat, tempore sed asperiores ipsa!
-                Quod, culpa et?
+                Discover the goodness and crunch of Makhana, your guilt-free
+                snack choice. Packed with nutrients and free from fat, added
+                preservatives, and cholesterol, it's a treat for both taste buds
+                and health. Unlike fried snacks, Makhana is roasted to
+                perfection, retaining its natural crunch and goodness. With its
+                low-calorie content and high nutritional value, Makhana makes
+                for a smart snack option, ideal for those craving something
+                delicious yet nutritious. Enjoy the satisfaction of munching on
+                Makhana anytime, knowing you're making a healthy choice that
+                supports your well-being. Treat yourself to the goodness of
+                Makhana and indulge in a snack that cares for you.
               </p>
               <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam
-                rem blanditiis aliquam omnis animi voluptates, alias incidunt
-                aperiam ullam tenetur doloremque ex corporis reprehenderit eum?
-                Odit nisi harum laboriosam totam!
+                Enjoy the satisfaction of munching on Makhana anytime, knowing
+                you're making a healthy choice that supports your well-being.
+                Treat yourself to the goodness of Makhana and indulge in a snack
+                that cares for you.
               </p>
             </div>
           </div>
@@ -541,7 +573,7 @@ export default function Products() {
           </div>
         </div>
       </div>
-      
+
       <Footer />
       <ToastContainer
         position="top-right"
