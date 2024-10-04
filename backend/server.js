@@ -19,6 +19,9 @@ app.use(cors(
 
 const database =require('./config/database.js')
 database()
+app.get('',(req,res)=>{
+    res.json("Server is running");
+})
 
 // routes  import
 const routes =require('./routes/dataroutes.js')
