@@ -10,7 +10,7 @@ var app=express()
 app.use(express.json());
 app.use(cors(
     {
-        origin: ["https://makhana-rose.vercel.app"],
+        origin: [`${process.env.URL}`],
         methods: ["GET", "POST", "PUT", "DELETE"],
         credentials: true
     }
