@@ -83,7 +83,7 @@ export default function Checkout() {
             };
     
             const validateRes = await fetch(
-              "http://localhost:3800/paymentverification",
+              `${import.meta.env.VITE_APP_API_URL}/paymentverification`,
               {
                 method: "POST",
                 body: JSON.stringify({
