@@ -94,6 +94,8 @@ routes.get('/allmessage',datacontroller.getmsg)
 
 // to get user order
 routes.post('/userorders', datacontroller.userOrders)
+// to delete user data
+routes.delete('/deleteuser', datacontroller.deleteData)
 
 // acc to date fetch order
 routes.get('/packedorder',datacontroller.packedorders)

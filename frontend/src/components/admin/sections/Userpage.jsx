@@ -7,6 +7,7 @@ export default function Userpage() {
   const [userDetail, setUserDetail] = useState([]);
   const [modal, setModal] = useState(false);
   const [userOrders,setUserOrders] = useState([]);
+  const [message, setMessage] = useState('');
   const handleData = (e) => {
     setModal(true);
 
@@ -34,18 +35,38 @@ export default function Userpage() {
           });
           })
   };
+  const handleDataDelete = async(e) => {
+    
+
+    setMessage('');
+
+        try {
+            const response = await axios.delete(`${import.meta.env.VITE_APP_API_URL}/deleteuser`, {
+                data: { id: e },
+            });
+
+            setMessage({ text: response.data.message, color: 'green' });
+            fetchAllUsers();
+        } catch (error) {
+            setMessage({ text: error.response?.data?.message || 'An error occurred', color: 'red' });
+            console.log(error)
+        }
+      
+  };
+  const fetchAllUsers = () => {
+    axios
+        .get(`${import.meta.env.VITE_APP_API_URL}/alluser`)
+        .then((response) => {
+            setData(response.data.user);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+};
   
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_APP_API_URL}/alluser`)
-      .then((response) => {
-        setData(response.data.user);
-        // console.log(response.data.user)
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    fetchAllUsers();
   }, []);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -75,6 +96,7 @@ export default function Userpage() {
                         <th>Verified </th>
                         <th>Id</th>
                         <th>Status</th>
+                        <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -95,6 +117,22 @@ export default function Userpage() {
                               Details
                             </button>
                           </td>
+                          <td>
+                            <button
+                              type="button"
+                              id="PopoverCustomT-1"
+                              className="btn btn-primary btn-sm"
+                              onClick={() => handleDataDelete(data._id)}
+                            >
+                              Delete Data
+                            </button>
+                            {message && (
+                <div style={{ color: message.color, marginTop: '20px' }}>
+                    {message.text}
+                </div>
+            )}
+                          </td>
+                          
                         </tr>
                       ))}
                     </tbody>

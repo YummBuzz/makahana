@@ -796,6 +796,34 @@ module.exports.userOrders =async (req,res)=>{
 
   }
 }
+module.exports.deleteData = async(req,res)=>{
+  try {
+    const { id } = req.body;
+
+   
+    const user = await stuser.findById(id);
+
+    if (!user) {
+        return res.status(404).json({ message: "User not found" });
+    }
+
+   
+    const orders = await order.find({ userdetail: user.username });
+
+   
+    if (orders.length > 0) {
+        await order.deleteMany({ userdetail: user.username });
+    }
+
+    // Delete the user
+    await stuser.findByIdAndDelete(id);
+
+    res.status(200).json({ message: "User and related orders deleted successfully" });
+} catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "An error occurred", error: err.message });
+}
+}
 
 
 // to calculate amount of orders
