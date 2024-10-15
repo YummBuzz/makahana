@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Navbar from '../Navbar/Navbar'
 import Footer from '../footer/Footer'
 import Scrollbutton from '../scrollToTop/Scrollbutton'
+import axios from 'axios'
+
 
 
 export default function Contact() {
@@ -20,7 +22,7 @@ const handleChange = (e) => {
 const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        const response = await axios.post(`${import.meta.env.VITE_APP_API_URL}/api/contact`, formData);
+        const response = await axios.post(`${import.meta.env.VITE_APP_API_URL}/message`, formData);
         alert(response.data.message);
         setFormData({ name: '', email: '', contact: '', message: '' });
     } catch (error) {
@@ -54,21 +56,21 @@ const handleSubmit = async (e) => {
                 <a href="#!" className="contact-link">
                   <i className="ph-fill ph-navigation-arrow"></i>
                   <span>
-                    Rishab Global industries Pvt Ltd.,New Delhi – 110005</span
+                  PECUMER  1202, Vijaya building, Connaught place ,New Delhi, 110001</span
                   >
                 </a>
               </p>
 
               <p>
-                <a href="#!" className="contact-link">
+                <a href="tel:8986927873" className="contact-link">
                   <i className="ph-bold ph-phone"></i>
-                  <span> 011+95829266</span>
+                  <span> 8986927873</span>
                 </a>
               </p>
               <p>
-                <a href="#!" className="contact-link">
+                <a href="mailto:indiafarmspolicy@gmail.com" className="contact-link">
                   <i className="ph-bold ph-envelope-simple"></i>
-                  <span> waginimakhana@gmail.com</span>
+                  <span> indiafarmspolicy@gmail.com</span>
                 </a>
               </p>
             </div>

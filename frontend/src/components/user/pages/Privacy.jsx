@@ -24,7 +24,7 @@ export default function Privacy() {
             <br />
             <br />
             This privacy policy applies to all information collected through our
-            website ************ , mobile applications, and any related
+            website https://www.yummbuzz.com , mobile applications, and any related
             services, sales, marketing, or events (we refer to them collectively
             in this privacy policy as the "Services").
             <br />
