@@ -10,7 +10,7 @@ var app=express()
 app.use(express.json());
 app.use(cors(
     {
-        origin: ["https://www.yummbuzz.com","http://localhost:5175"],
+        origin: ["https://www.yummbuzz.com"],
         methods: ["GET", "POST", "PUT", "DELETE"],
         credentials: true
     }
