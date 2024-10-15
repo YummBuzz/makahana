@@ -23,7 +23,7 @@ const handleSubmit = async (e) => {
     e.preventDefault();
     try {
         const response = await axios.post(`${import.meta.env.VITE_APP_API_URL}/message`, formData);
-        alert(response.data.message);
+        alert(response.data);
         setFormData({ name: '', email: '', contact: '', message: '' });
     } catch (error) {
         alert('Error saving contact');
