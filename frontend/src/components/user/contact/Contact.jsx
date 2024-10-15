@@ -43,11 +43,9 @@ const handleSubmit = async (e) => {
         <div className="col-12 col-lg-6">
           <div className="contact-content">
             <div>
-              <h4>Address</h4>
+              {/* <h4>Address</h4> */}
               <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                minus dignissimos. Lorem ipsum dolor sit amet consectetur
-                adipisicing elit. At minus dignissimos.
+              For any inquiries or assistance regarding our delicious makhana, please reach out to us. We're here to help! Contact us for prompt support at YummBuzz.
               </p>
             </div>
             <div>
@@ -77,10 +75,7 @@ const handleSubmit = async (e) => {
             <div>
               <p><strong> Hii there </strong></p>
               <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa
-                cum ullam pariatur unde voluptate accusamus aperiam, aut
-                recusandae, deleniti officia, nulla obcaecati autem? Corporis
-                ipsa soluta maiores, officia beatae explicabo?
+              At YummBuzz, we are dedicated to providing exceptional support and ensuring our customers are always satisfied. Whether you have questions, feedback, or require assistance, we're here to help every step of the way. Your satisfaction is our top priority, and we look forward to hearing from you!
               </p>
             </div>
           </div>
@@ -91,6 +86,7 @@ const handleSubmit = async (e) => {
               <input
                 type="text"
                 className="form-control"
+                name="name"
                 value={formData.name} onChange={handleChange}
                 id="formGroupExampleInput"
                 placeholder="Name"
@@ -102,6 +98,7 @@ const handleSubmit = async (e) => {
                 className="form-control"
                 id="formGroupExampleInput2"
                 placeholder="E-mail"
+                name="email"
                 value={formData.email} onChange={handleChange}
               />
             </div>
@@ -111,6 +108,7 @@ const handleSubmit = async (e) => {
                 className="form-control"
                 id="formGroupExampleInput2"
                 placeholder="Contact Number"
+                name="contact"
                 value={formData.contact} onChange={handleChange}
               />
             </div>
@@ -119,6 +117,7 @@ const handleSubmit = async (e) => {
                 className="form-control"
                 placeholder="Leave a comment here"
                 id="floatingTextarea2"
+                name='message'
                 value={formData.message} onChange={handleChange}
                 style={{height: "100px"}}
               ></textarea>
