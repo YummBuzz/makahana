@@ -773,9 +773,22 @@ module.exports.getmsg = async (req, res) => {
 
 module.exports.userOrders =async (req,res)=>{
   try{
-    const{username}=req.body
-    const products = await order.findOne({userdetail:username})
-    console.log(products)
+    
+    const { id } = req.body; 
+ 
+  const user = await stuser.findById(id); 
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+
+  const orders = await order.find({ userdetail: user.username }); // Adjust the query as per your schema
+
+  if (!orders || orders.length === 0) {
+    return res.status(404).json({ message: "No orders found for this user" });
+  }
+  res.status(200).json(orders);
 
   }
   catch(err){

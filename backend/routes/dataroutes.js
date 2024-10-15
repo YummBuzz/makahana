@@ -93,7 +93,7 @@ routes.post('/message',datacontroller.message)
 routes.get('/allmessage',datacontroller.getmsg)
 
 // to get user order
-routes.get('/userorders', datacontroller.userOrders)
+routes.post('/userorders', datacontroller.userOrders)
 
 // acc to date fetch order
 routes.get('/packedorder',datacontroller.packedorders)

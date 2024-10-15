@@ -5,6 +5,28 @@ import Scrollbutton from '../scrollToTop/Scrollbutton'
 
 
 export default function Contact() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    contact: '',
+    message: '',
+});
+
+const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+};
+
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+        const response = await axios.post(`${import.meta.env.VITE_APP_API_URL}/api/contact`, formData);
+        alert(response.data.message);
+        setFormData({ name: '', email: '', contact: '', message: '' });
+    } catch (error) {
+        alert('Error saving contact');
+    }
+};
   return (
     <>
     <Navbar pdScroll={0}/>
@@ -62,11 +84,12 @@ export default function Contact() {
           </div>
         </div>
         <div className="col-12 col-lg-6">
-          <form className="contact-form">
+          <form className="contact-form" onSubmit={handleSubmit}>
             <div className="mb-3">
               <input
                 type="text"
                 className="form-control"
+                value={formData.name} onChange={handleChange}
                 id="formGroupExampleInput"
                 placeholder="Name"
               />
@@ -77,6 +100,7 @@ export default function Contact() {
                 className="form-control"
                 id="formGroupExampleInput2"
                 placeholder="E-mail"
+                value={formData.email} onChange={handleChange}
               />
             </div>
             <div className="mb-3">
@@ -85,6 +109,7 @@ export default function Contact() {
                 className="form-control"
                 id="formGroupExampleInput2"
                 placeholder="Contact Number"
+                value={formData.contact} onChange={handleChange}
               />
             </div>
             <div className="form-floating">
@@ -92,6 +117,7 @@ export default function Contact() {
                 className="form-control"
                 placeholder="Leave a comment here"
                 id="floatingTextarea2"
+                value={formData.message} onChange={handleChange}
                 style={{height: "100px"}}
               ></textarea>
               <label htmlFor="floatingTextarea2">Comments</label>

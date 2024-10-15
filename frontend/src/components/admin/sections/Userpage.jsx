@@ -6,6 +6,7 @@ export default function Userpage() {
   const [data, setData] = useState([]);
   const [userDetail, setUserDetail] = useState([]);
   const [modal, setModal] = useState(false);
+  const [userOrders,setUserOrders] = useState([]);
   const handleData = (e) => {
     setModal(true);
 
@@ -13,11 +14,25 @@ export default function Userpage() {
       .get(`${import.meta.env.VITE_APP_API_URL}/alluser?id=${e}`)
       .then((response) => {
         setUserDetail(response.data.userDetail);
-        console.log(response.data.userDetail);
+       
       })
       .catch((error) => {
         console.error(error);
-      });
+      })
+      .finally(() => {
+     
+        axios
+          .post(`${import.meta.env.VITE_APP_API_URL}/userorders`, {
+            id:e,
+          })
+          .then((orderResponse) => {
+            setUserOrders(orderResponse.data); // Assuming you're setting orders in state
+            console.log(orderResponse.data);
+          })
+          .catch((error) => {
+            console.error(error.response.data.message);
+          });
+          })
   };
   
 
@@ -32,6 +47,11 @@ export default function Userpage() {
         console.error(error);
       });
   }, []);
+  const [isOpen, setIsOpen] = useState(false);
+
+        const toggleDetails = () => {
+          setIsOpen(!isOpen);
+        };
 
   return (
     <>
@@ -149,126 +169,9 @@ export default function Userpage() {
                   </div>
                 </div>
 
-                {/* <div className="ms-bx" style={{ width: "100%" }}>
-                  <p
-                    className=" d-flex gap-2 align-items-center"
-                    style={{ fontSize: "20px" }}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="22"
-                      height="22"
-                      fill="currentColor"
-                      className="bi bi-cash-coin"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8m5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0"
-                      />
-                      <path d="M9.438 11.944c.047.596.518 1.06 1.363 1.116v.44h.375v-.443c.875-.061 1.386-.529 1.386-1.207 0-.618-.39-.936-1.09-1.1l-.296-.07v-1.2c.376.043.614.248.671.532h.658c-.047-.575-.54-1.024-1.329-1.073V8.5h-.375v.45c-.747.073-1.255.522-1.255 1.158 0 .562.378.92 1.007 1.066l.248.061v1.272c-.384-.058-.639-.27-.696-.563h-.668zm1.36-1.354c-.369-.085-.569-.26-.569-.522 0-.294.216-.514.572-.578v1.1zm.432.746c.449.104.655.272.655.569 0 .339-.257.571-.709.614v-1.195z" />
-                      <path d="M1 0a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.083q.088-.517.258-1H3a2 2 0 0 0-2-2V3a2 2 0 0 0 2-2h10a2 2 0 0 0 2 2v3.528c.38.34.717.728 1 1.154V1a1 1 0 0 0-1-1z" />
-                      <path d="M9.998 5.083 10 5a2 2 0 1 0-3.132 1.65 6 6 0 0 1 3.13-1.567" />
-                    </svg>
-                    Stats
-                  </p>
-                  <div className="dt-sec d-flex flex-wrap justify-content-evenly gap-5 mt-5">
-                    <div className="stats">
-                      <p style={{ fontSize: "13px" }}>Average Order</p>
-                      <p style={{ fontSize: "22px", margin: "3px 0px" }}>
-                        $000
-                      </p>
-                      <p style={{ fontSize: "8px" }}>
-                        Based On Total Order Value
-                      </p>
-                    </div>
-                    <div className="stats">
-                      <p style={{ fontSize: "13px" }}>
-                        Average Order Per Month
-                      </p>
-                      <p style={{ fontSize: "22px", margin: "3px 0px" }}>
-                        $000
-                      </p>
-                      <p style={{ fontSize: "8px" }}>
-                        Based On Total Order Value Per Month
-                      </p>
-                    </div>
-                    <div className="stats">
-                      <p style={{ fontSize: "13px" }}>Average Order</p>
-                      <p style={{ fontSize: "22px", margin: "3px 0px" }}>
-                        $000
-                      </p>
-                      <p style={{ fontSize: "8px" }}>
-                        Based On Total Order Value
-                      </p>
-                    </div>
-                    <div className="stats">
-                      <p style={{ fontSize: "13px" }}>Average Order</p>
-                      <p style={{ fontSize: "22px", margin: "3px 0px" }}>
-                        $000
-                      </p>
-                      <p style={{ fontSize: "8px" }}>
-                        Based On Total Order Value
-                      </p>
-                    </div>
-                  </div>
-                </div> */}
+                
               </div>
-              {/* Address */}
-              {/* <div className="ms-1 ">
-                <div
-                  className="ms-bx d-flex flex-column gap-5"
-                  style={{ width: "100%", height: "60vh", overflow: "scroll" }}
-                >
-                  <p className=" d-flex gap-2 align-items-center  ">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="22"
-                      height="22"
-                      fill="currentColor"
-                      className="bi bi-geo-alt"
-                      viewBox="0 0 16 16"
-                    >
-                      <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
-                      <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
-                    </svg>
-                    Addresses
-                  </p>
-                  <div className="stats-1">
-                    <p style={{ fontSize: "13px", color: "#00000053" }}>
-                      Address-1
-                    </p>
-
-                    <p style={{ fontSize: "15px", margin: "5px 0px" }}>
-                      123 Bird Street, LN Road, Alabama <br /> Tallahassee, FL
-                      32301 <br />
-                      Suite 101
-                    </p>
-                  </div>
-                  <div className="stats-1">
-                    <p style={{ fontSize: "13px", color: "#00000053" }}>
-                      Address-2
-                    </p>
-
-                    <p style={{ fontSize: "15px", margin: "5px 0px" }}>
-                      123 Bird Street, LN Road, Alabama <br /> Tallahassee, FL
-                      32301 <br />
-                      Suite 101
-                    </p>
-                  </div>
-                  <div className="stats-1">
-                    <p style={{ fontSize: "13px", color: "#00000053" }}>
-                      Address-3
-                    </p>
-
-                    <p style={{ fontSize: "15px", margin: "5px 0px" }}>
-                      123 Bird Street, LN Road, Alabama <br /> Tallahassee, FL
-                      32301 <br />
-                      Suite 101
-                    </p>
-                  </div>
-                </div>
-              </div> */}
+              
             </div>
 
             {/* recent orders */}
@@ -307,25 +210,83 @@ export default function Userpage() {
                               </tr>
                             </thead>
                             <tbody>
-                              {/* {data.map((data) => (
+                              {userOrders.map((data) => (
                                 <tr key={data._id}>
-                                  <td>{data.name.toUpperCase()}</td>
-                                  <td>{data.username}</td>
-                                  <td></td>
-                                  <td>{data.isVerified ? "Yes" : "No"}</td>
                                   <td>{data._id}</td>
+                                  <td>{data.userdetail.toUpperCase()}</td>
+                                  <td> {new Date(
+                                              data.createdAt
+                                            ).toLocaleString()}</td>
+                                            {/* <td>{data.cartdata.map((product) => (
+                                      <div className="list-group-item p-3 bg-white">
+                                        <div className="row no-gutters">
+                                          <div className="row no-gutters mt-3">
+                                            <div className="col-3 col-md-1"></div>
+                                            <div className="col-9 col-md-8 pr-0 pr-md-3">
+                                              <h6 className="text-charcoal mb-2 mb-md-1">
+                                                <span
+                                                  className="text-charcoal"
+                                                  style={{ color: "#49AED0" }}
+                                                >
+                                                  {product.quantity} x {product.title}
+                                                </span>
+                                              </h6>
+                                              <ul className="list-unstyled text-pebble mb-2 small">
+                                                <li className="">
+                                                  <b>Type:</b> {product.type}
+                                                </li>
+                                                <li className="">
+                                                  <b>Size:</b> {product.size}
+                                                </li>
+                                                <li className="">
+                                                  <b>Quantity:</b> {product.quantity}
+                                                </li>
+                                              </ul>
+                                              <h6 className="text-charcoal text-left mb-0 mb-md-2">
+                                                <b> ₹{product.price}</b>
+                                              </h6>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    ))}</td> */}
+                                    <td>
+              <div onClick={toggleDetails} style={{ cursor: 'pointer', color: '#49AED0' }}>
+                {isOpen ? 'Hide Details' : 'Show Details'}
+              </div>
+              {isOpen && (
+                <div>
+                  {data.cartdata.map((product) => (
+                    <div className="list-group-item p-3 bg-white" key={product.id}>
+                      <div className="row no-gutters">
+                        <div className="col-9 col-md-8 pr-0 pr-md-3">
+                          <h6 className="text-charcoal mb-2 mb-md-1">
+                            <span className="text-charcoal" style={{ color: "#49AED0" }}>
+                              {product.quantity} x {product.title}
+                            </span>
+                          </h6>
+                          <ul className="list-unstyled text-pebble mb-2 small">
+                            <li><b>Type:</b> {product.type}</li>
+                            <li><b>Size:</b> {product.size}</li>
+                            <li><b>Quantity:</b> {product.quantity}</li>
+                          </ul>
+                          <h6 className="text-charcoal text-left mb-0 mb-md-2">
+                            <b> ₹{product.price}</b>
+                          </h6>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </td>
+                                  <td>{data.cartTotalQuantity}</td>
+                                  
                                   <td>
-                                    <button
-                                      type="button"
-                                      id="PopoverCustomT-1"
-                                      className="btn btn-primary btn-sm"
-                                      onClick={() => handleData(data._id)}
-                                    >
-                                      Details
-                                    </button>
+                                  ₹{data.cartTotalAmount}
                                   </td>
                                 </tr>
-                              ))} */}
+                              ))}
                             </tbody>
                           </table>
                         </div>

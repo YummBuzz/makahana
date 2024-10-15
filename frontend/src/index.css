@@ -145,6 +145,7 @@
 
 .button:hover {
   border: 0.3px solid var(--color1);
+  background-color: var(--color1) !important;
 }
 
 .button:hover a,
@@ -152,7 +153,7 @@
   color: var(--color9);
 }
 
-.button::after,
+/* .button::after,
 .button::before {
   content: "";
   display: block;
@@ -163,7 +164,7 @@
   inset: 50%;
   left: 25%;
   z-index: -1;
-  transition: 0.8s ease-out;
+  transition: transform 0.8s ease-out;
   background-color: var(--color1);
 }
 
@@ -179,7 +180,11 @@
 
 .button:hover::after {
   transform: skew(45deg) translate(-50%, -50%);
-}
+} */
+
+
+
+
 
 /*header*/
 
@@ -870,7 +875,8 @@
 }
 
 .section3-about-btn .button {
-  border: 1px solid var(--color9);
+  border: 1px solid var(--color5);
+  
 }
 .section3-about-btn .button a,
 .section3-about-btn .button i {
@@ -878,13 +884,10 @@
   transition: ease-out 0.8s;
 }
 
-.section3-about-btn .button::after,
-.section3-about-btn .button::before {
-  background-color: var(--color3);
-}
 
 .section3-about .button:hover {
-  border: 1px solid var(--color1);
+  border: 1px solid var(--color3);
+  background-color: var(--color3) !important;
 }
 
 .section3-about .button:hover a,

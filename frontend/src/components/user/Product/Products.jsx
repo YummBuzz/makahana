@@ -94,7 +94,7 @@ export default function Products() {
 
   return (
     <>
-      <Navbar brand={selectedBrand} />
+      <Navbar brand={selectedBrand}  pdScroll={0}/>
       <Scrollbutton />
       <div
         id="carouselExampleAutoplaying"
