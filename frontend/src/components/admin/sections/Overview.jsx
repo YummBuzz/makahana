@@ -508,14 +508,16 @@ export default function Overview() {
                                   <div className="widget-content-left mr-3"></div>
                                   <div className="widget-content-left flex2">
                                     <div className="widget-heading">
-                                      {data.firstname}
-                                      {data.lastname}
+                                      {data.firstname}  {data.lastname}
                                     </div>
                                   </div>
                                 </div>
                               </div>
                             </td>
 
+                            <td className="text-center">
+                              {data.cartTotalQuantity}
+                            </td>
                             <td className="text-center">
                               {data.cartTotalAmount}
                             </td>
