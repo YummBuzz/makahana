@@ -169,7 +169,7 @@ export default function Navbar({ logo, brand, pdScroll }) {
             </div>
           </div>
           <Link to="/about"> About Us</Link>
-          <Link to="/"> Blogs </Link>
+          {/* <Link to="/"> Blogs </Link> */}
           <Link to="/contact"> Contact Us</Link>
         </div>
 

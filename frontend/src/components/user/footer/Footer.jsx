@@ -19,7 +19,8 @@ export default function Footer() {
                 <a href="" className="contact-link">
                   <i className="ph-fill ph-navigation-arrow"></i>
                   <span>
-                  1202, 12th floor, Barkhamba road, Connaught Place, Delhi-110001</span
+                  PECUMER 1202, Vijaya building, Connaught place  New
+            Delhi, 110001 </span
                   >
                 </a>
               </p>
@@ -31,9 +32,9 @@ export default function Footer() {
                 </a>
               </p>
               <p>
-                <a href="mailto:sales@wagini.com" className="contact-link">
+                <a href="mailto:indiafarmspolicy@gmail.com" className="contact-link">
                   <i className="ph-bold ph-envelope-simple"></i>
-                  <span> sales@wagini.com</span>
+                  <span> indiafarmspolicy@gmail.com</span>
                 </a>
               </p>
             </div>
@@ -46,7 +47,7 @@ export default function Footer() {
               <p><Link to="/"> home </Link></p>
               <p><Link to="/about"> About Us</Link></p>
               <p><Link to="/products/all"> Shop </Link></p>
-              <p><Link to='/'> Blogs</Link></p>
+              {/* <p><Link to='/'> Blogs</Link></p> */}
               <p><Link to="/contact"> Contact Us </Link></p>
             </div>
           </div>
@@ -56,7 +57,6 @@ export default function Footer() {
             </div>
             <div className="footer-links">
               <p><Link to="/privacy-policy"> Privacy Policy </Link></p>
-              <p><Link to="/"> Return Policy</Link></p>
               <p><Link to="/terms&conditions"> Terms & Conditions </Link></p>
             </div>
           </div>

@@ -25,7 +25,7 @@ export default function Products() {
       `${import.meta.env.VITE_APP_API_URL}/products`,
       {
         params: {
-          brand: selectedBrand,
+          brand,
           sort: sort,
           page: currentPage, // Include current page in params
           pageSize: pageSize, // Include page size in params
@@ -56,7 +56,10 @@ export default function Products() {
       setBanner1Img(false);
       setBanner2Img(false);
     }
+    
   }, [selectedBrand]);
+
+
   // for brand filter button on laptop
   const handleBrandChange = (event) => {
     setSelectedBrand(event.target.value);

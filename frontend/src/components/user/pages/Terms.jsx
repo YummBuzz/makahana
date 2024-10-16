@@ -21,7 +21,7 @@ export default function Terms() {
             style={{ width: "100%", whiteSpace: "pre-wrap" }}
           >
             Welcome to PECUMER! These Terms and Conditions ("Terms") govern
-            your access to and use of our website located at [yourwebsite.com]
+            your access to and use of our website located at https://www.yummbuzz.com
             (the "Site"), as well as the purchase of products and services
             offered by us. By accessing or using our Site, you agree to comply
             with and be bound by these T erms. If you do not agree to these T

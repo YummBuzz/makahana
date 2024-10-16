@@ -1253,6 +1253,7 @@
   margin-bottom: 0;}
   .shop-section1 {
     height: 100%;
+    margin-top: 76px;
   }
   
   .shop-section1 img {
@@ -1916,7 +1917,7 @@
   text-decoration: none;
   font-family: var(--mona);
   font-weight: 500;
-  width: 19em;
+  width: 100%;
   height: 3.2em;
   border: none;
 }
@@ -2030,7 +2031,7 @@
 /*contact-us-page*/
 
 .contact-us-section1 {
-  padding-top: 80px;
+  padding-top: 90px;
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -2160,6 +2161,10 @@
 
 /* mobile phones to tablet devices*/
 @media (max-width: 991.98px) {
+  .about-product h4 {
+    font-size:24px;
+    line-height:34px;
+  }
   /*header*/
   .logos a {
     width: 120px;

@@ -275,9 +275,9 @@ export default function Checkout() {
 
              
               <div className="policy-pages-links">
-                <Link> Terms & Conditions</Link>
-                <Link> Privacy Policy</Link>
-                <Link> Contact Information</Link>
+                <Link to="/terms&conditions"> Terms & Conditions</Link>
+                <Link to="/privacy-policy"> Privacy Policy</Link>
+                <Link to="/contact"> Contact Information</Link>
               </div>
             </div>
 
