@@ -475,7 +475,7 @@ export default function Overview() {
                     <thead>
                       <tr>
                         <th>Order Id </th>
-                        <th>Product</th>
+                        <th>Username</th>
 
                         <th>Quantity</th>
                         <th>Total Amount</th>
