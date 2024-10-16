@@ -37,7 +37,7 @@ export default function Overview() {
         setMonthtrend(response.data.monthtrend);
         setTotalProducts(response.data.productscount);
 
-        console.log(response.data);
+       
       })
       .catch((error) => {
         console.error(error);
@@ -65,7 +65,7 @@ export default function Overview() {
       .then((response) => {
         const orders = response.data;
         setLatestOrder(orders);
-        console.log(response);
+        
       })
       .catch((error) => {
         console.error(error);
@@ -75,7 +75,7 @@ export default function Overview() {
       .then((response) => {
         const topproducts = response.data;
         setTopProducts(topproducts);
-        console.log(response);
+        
       })
       .catch((error) => {
         console.error(error);
@@ -339,7 +339,7 @@ export default function Overview() {
                     </tbody>
                   </table>
                 </div>
-                <div className="d-block text-center card-footer">
+                {/* <div className="d-block text-center card-footer">
                   {selectedButton === "week" && usersWeek.length >= 7 ? (
                     <button className="btn-wide btn btn-success">
                       View All
@@ -350,7 +350,7 @@ export default function Overview() {
                       View All
                     </button>
                   ) : null}
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -444,7 +444,7 @@ export default function Overview() {
                   </table>
                 </div>
 
-                <div className="d-block text-center card-footer">
+                {/* <div className="d-block text-center card-footer">
                   {selectedButton === "week" && usersWeek.length >= 7 ? (
                     <button className="btn-wide btn btn-success">
                       View All
@@ -455,7 +455,7 @@ export default function Overview() {
                       View All
                     </button>
                   ) : null}
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

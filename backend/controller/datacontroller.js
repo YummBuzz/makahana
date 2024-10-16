@@ -915,7 +915,7 @@ module.exports.latestorder =async(req,res)=>{
     tomorrow.setDate(today.getDate() + 1); // Set to next day
     
     const orders = await order.find({
-      orderDate: { $gte: today, $lt: tomorrow }
+      createdAt: { $gte: today, $lt: tomorrow }
     });
 
     res.json(orders);
