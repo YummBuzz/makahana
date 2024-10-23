@@ -82,7 +82,7 @@ export default function Footer() {
         <div className="row mt-3">
           <div className="col-12 copyright">
             <p>Copyright@2024: All rights reserved</p>
-            <p>Developed By WGI</p>
+            <a href='https://webglobeindia.com/' target='_blank'>Developed By WGI</a>
           </div>
         </div>
       </div>
